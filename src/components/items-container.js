@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { css } from '@emotion/core';
 import { ClipLoader } from 'react-spinners';
+import Grid from '@material-ui/core/Grid';
+
 import Item from './item'
 import { fetchItems } from '../services/api'
 
@@ -22,11 +24,23 @@ const override = css`
   );
 }*/
 const ItemsList = ({ items }) => {
-  return items.map(i => {
-    return <Item item={i} key={i.id} />;
-  });
+	let rows = [[]];
+
+	for (let i = 0; i < Math.ceil(items.length / 3); i++){
+		rows[i] = items.slice(i * 3, (i + 1) * 3);
+	}
+	debugger;
+	return rows.map(row => {
+	    return (<Grid container item xs={12}> <GridRow row={row}/> </Grid>);
+	});
 };
 
+const GridRow = ({row}) => {
+	//debugger;
+	return row.map(i => {
+	    return (<Grid item xs={4}> <Item item={i} key={i.id} /> </Grid>);
+	});
+}
 
 class ItemsContainter extends Component {
 
@@ -54,17 +68,19 @@ class ItemsContainter extends Component {
 
 			// does isLoading work 
 			//css={override}
-		return (
-			<React.Fragment>
-			 <ClipLoader
+
+		if (this.state.isLoading) {
+	      // Render loading state ...
+	      return (<ClipLoader
 		          sizeUnit={"px"}
 		          size={150}
 		          color={'#123abc'}
 		          loading={this.state.isLoading}
-		        />
-			<ItemsList items={this.state.items} />
-			</React.Fragment>
-			);
+		        />);
+	    } else {
+	      // Render real UI ...
+			return (<ItemsList items={this.state.items} />);
+	    }
 	}
 } 
 

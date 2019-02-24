@@ -21,7 +21,6 @@ class Item extends Component {
 			};
 
 		return (
-			<Grid item xs={this.state.gridFactor}>
 				<div class="item">
 					<a onClick={() => this.showDetailed(this.props.item.id)}>
 						<div class="circle-wrap">
@@ -37,7 +36,6 @@ class Item extends Component {
 		                </div>
 					</a>
 				</div>
-			</Grid>
 		)
 	}
 }
