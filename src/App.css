@@ -31,3 +31,75 @@
     transform: rotate(360deg);
   }
 }
+
+a {
+    line-height: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.navigation-links {
+    color: #000;
+    font-size: 24px;
+    font-family: montserrat;
+    font-weight: bold;
+}
+
+.item {
+    width: 100%;
+    height: 35vw;
+    position: relative;
+    border-bottom: 1px solid #e0e0e0;
+    transition: all 0.2s ease;
+}
+
+.circle-wrap {
+    border-radius: 0;
+    -webkit-mask-image: url(http://html.blahlab.com/aoko/images/circle.svg);   /* todo : not from 3rd party */;
+    -webkit-mask-position: center center;
+    -webkit-mask-size: 70% 70%;
+    -webkit-mask-repeat: no-repeat;
+    width: 100%;
+    height: 24.3vw;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.circle-wrap .media {
+    width: 100%;
+    height: 100%;
+    background-position: center center;
+    background-size: cover;
+}
+
+.item .client-name {
+    position: absolute;
+    left: 40px;
+    top: 80%;
+    width: 30%;
+}
+
+.item .project {
+    position: absolute;
+    right: 20px;
+    top: 80%;
+    width: 40%;
+}
+
+.item a h2 {
+    font-size: 9px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #000;
+}
+
+.item a h3 {
+    font-size: 14px;
+    color: #000;
+    font-weight: normal;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+    font-family: lora;
+    text-transform: capitalize;
+}

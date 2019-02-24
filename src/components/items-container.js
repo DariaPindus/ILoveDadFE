@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import Spinner from '../Spinner';
-
-import { fetchItems } from '../../services/shelf/actions';
+import { css } from '@emotion/core';
+import { ClipLoader } from 'react-spinners';
+import Item from './item'
+import { fetchItems } from '../services/api'
 
 //todo : make spinner global for app 
 const override = css`
@@ -30,26 +31,39 @@ const ItemsList = ({ items }) => {
 class ItemsContainter extends Component {
 
 	state = {
-		isLoading: false
+		isLoading: false, 
+		items : []
 	};
 
 	componentDidMount() {
-		this.handleFetchProducts();
+		this.initItems();
+	}
+
+	initItems() {
+		debugger;
+		this.setState({isLoading : true});
+		fetchItems().then(
+			response => {
+				this.setState({items: response});
+				this.setState({isLoading : false});
+			});
 	}
 
 	render() {
-		const {isLoading} = this.state;
+		const {isLoading} = this.state.isLoading;		//how it works?
 
 			// does isLoading work 
+			//css={override}
 		return (
+			<React.Fragment>
 			 <ClipLoader
-		          css={override}
 		          sizeUnit={"px"}
 		          size={150}
 		          color={'#123abc'}
-		          loading={isLoading}
+		          loading={this.state.isLoading}
 		        />
-			<ItemsList items={items} />
+			<ItemsList items={this.state.items} />
+			</React.Fragment>
 			);
 	}
 } 

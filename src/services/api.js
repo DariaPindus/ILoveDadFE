@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 
-const itemsURL =
-  'C:\\Users\\Asus\\Documents\\react-tutorial\\my-app\\src\\mock_data.js\\mock_data.js';
+const itemsURL = process.env.PUBLIC_URL + '/mock_data.json';// 'C:\\Users\\Asus\\Documents\\react-tutorial\\my-app\\src\\mock_data.json';
+
 // export const itemsAPI = "http://localhost:8001/api/items";
-export const fetchItems = (filters, sortBy, callback) => dispatch => {
+/*export const fetchItems = (filters, sortBy, callback) => dispatch => {
   return axios
     .get(itemsURL)
     .then(res => {
@@ -32,4 +32,16 @@ export const fetchItems = (filters, sortBy, callback) => dispatch => {
     .catch(err => {
       console.log('Could not fetch items. Try again later.');
     });
-};
+};*/
+
+export function fetchItems() {
+  return axios
+      .get(itemsURL)
+      .then(function (response) {
+        return response.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      
+}

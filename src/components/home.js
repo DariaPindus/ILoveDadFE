@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 
-import ItemsContainter from './'
+import ItemsContainter from './items-container'
 
 class Home extends Component {
 
 	render() {
 		return (
-			<ItemsContainter/>
+			<React.Fragment>
+				<ItemsContainter/>
+			</React.Fragment>
 		);
 	}
 } 
