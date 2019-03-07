@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import * as API from './api_constants'
+
 
 const itemsURL = process.env.PUBLIC_URL + '/mock_data.json';// 'C:\\Users\\Asus\\Documents\\react-tutorial\\my-app\\src\\mock_data.json';
 
@@ -36,7 +38,7 @@ const itemsURL = process.env.PUBLIC_URL + '/mock_data.json';// 'C:\\Users\\Asus\
 
 export function fetchItems() {
   return axios
-      .get(itemsURL)
+      .get(API.GET_ITEMS)
       .then(function (response) {
         return response.data;
       })

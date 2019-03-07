@@ -103,3 +103,47 @@ a {
     font-family: lora;
     text-transform: capitalize;
 }
+
+.column, .columns {
+    width: 100%;
+    float: left;
+}
+
+.spacing {
+    height: 20px;
+    clear: both;
+}
+
+.case-study-content h3.meta-title {
+    font-size: 16px;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: montserrat;
+    font-weight: bold;
+    letter-spacing: 0px;
+    line-height: 1.2em;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+}
+
+/*todo: check this style is ok*/
+.case-study-content h3.meta-title::before {
+    content: "-";
+    width: 10px;
+    height: 1px;
+    display: block;
+    background: #ff5242;
+    position: absolute;
+    left: -20px;
+    top: 8px;
+}
+
+p {
+    margin-bottom: 1rem;
+    font-size: inherit;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+}
