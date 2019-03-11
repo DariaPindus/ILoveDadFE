@@ -57,7 +57,7 @@ class DetailedItem extends Component {
 				                  <h3 class="meta-title">Colors</h3>
 				                  <p class="meta-data">
 				                  	<Paper className={classes.root}>
-								        {this.props.item.sizes.map(data => {
+								        {this.props.item.Colors.map(data => {
 								          return (
 								          	<Chip 
 								          		color="primary" 
