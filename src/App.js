@@ -10,16 +10,10 @@ import Header from './components/header';
 class App extends Component {
   render() {
     return (
-      <div> {/* className={classes.root}*/}
-      <Grid container spacing={24}>
-        <Grid item xs={12}>
-          <Header/>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Home/> 
-        </Grid>
-      </Grid>
+      <div id="page" class="site"> {/* className={classes.root}*/}
+        <div id="hero">
+          
+        </div>
       </div>
     );
   }

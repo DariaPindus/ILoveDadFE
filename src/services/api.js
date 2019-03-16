@@ -2,9 +2,13 @@ import axios from 'axios';
 
 import * as API from './api_constants'
 
+//todo : temp until I find something smarter
+let cache = {
+  categories : []
+}
 
-const itemsURL = process.env.PUBLIC_URL + '/mock_data.json';// 'C:\\Users\\Asus\\Documents\\react-tutorial\\my-app\\src\\mock_data.json';
-
+const itemsURL = process.env.PUBLIC_URL + '/mock/items.json';// 'C:\\Users\\Asus\\Documents\\react-tutorial\\my-app\\src\\mock_data.json';
+const categoriesURL = process.env.PUBLIC_URL + '/mock/categs.json';
 // export const itemsAPI = "http://localhost:8001/api/items";
 /*export const fetchItems = (filters, sortBy, callback) => dispatch => {
   return axios
@@ -46,4 +50,19 @@ export function fetchItems() {
         console.log(error);
       });
       
+}
+
+export function fetchCategories() {
+  if (cache.categories)
+    return cache.categories;
+
+  return axios
+    .get(categoriesURL)
+    .then(function (response)) {
+      cache.categories = response.data;
+      return response.data;
+    }
+    .catch(function (error) {
+        console.log(error);
+    });
 }
