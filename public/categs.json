@@ -1,0 +1,17 @@
+[  
+   {  
+      "id":1,
+      "name":"Кухни", 
+      "route":"kitchens"
+   },
+   {  
+      "id":2,
+      "name":"Шкафы", 
+      "route":"shkaf"
+   },
+   {  
+      "id":3,
+      "name":"Прихожие", 
+      "route":"hall"
+   }
+]

@@ -7,10 +7,15 @@ import './App.css';
 import Home from './components/home';
 import Header from './components/header';
 
+/*className={classes.root}*/
 class App extends Component {
+
   render() {
+  	document.body.classList.add('archive', 'post-type-archive', 'post-type-archive-product','woocommerce',
+  								'woocommerce-page','woocommerce-js','hfeed');	
     return (
-      <div id="page" class="site"> {/* className={classes.root}*/}
+      <div id="page" className="site">
+      	<Header/>
         <div id="hero">
           
         </div>

@@ -9,7 +9,7 @@ class Item extends Component {
 
 	state = {
 		gridFactor : ItemGridFactor, 
-		open : false 
+		open : false,  
 		item : {}
 	}
 

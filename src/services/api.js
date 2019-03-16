@@ -1,14 +1,17 @@
 import axios from 'axios';
 
 import * as API from './api_constants'
+import { API_ROOT } from '../api-config';
 
 //todo : temp until I find something smarter
 let cache = {
   categories : []
 }
 
-const itemsURL = process.env.PUBLIC_URL + '/mock/items.json';// 'C:\\Users\\Asus\\Documents\\react-tutorial\\my-app\\src\\mock_data.json';
-const categoriesURL = process.env.PUBLIC_URL + '/mock/categs.json';
+/*const itemsURL = process.env.PUBLIC_URL + '/mock/items.json';// 'C:\\Users\\Asus\\Documents\\react-tutorial\\my-app\\src\\mock_data.json';
+const categoriesURL = process.env.PUBLIC_URL + '/mock/categs.json'*/
+const itemsURL = `${API_ROOT}/items.json`;// 'C:\\Users\\Asus\\Documents\\react-tutorial\\my-app\\src\\mock_data.json';
+const categoriesURL = `${API_ROOT}/categs.json`;
 // export const itemsAPI = "http://localhost:8001/api/items";
 /*export const fetchItems = (filters, sortBy, callback) => dispatch => {
   return axios
@@ -53,15 +56,16 @@ export function fetchItems() {
 }
 
 export function fetchCategories() {
-  if (cache.categories)
+  if (cache.categories.length > 0)
     return cache.categories;
 
+  let curl = process.env.PUBLIC_URL + '/items.json';
   return axios
     .get(categoriesURL)
-    .then(function (response)) {
+    .then(function (response) {
       cache.categories = response.data;
       return response.data;
-    }
+    })
     .catch(function (error) {
         console.log(error);
     });

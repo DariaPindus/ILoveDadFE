@@ -13,30 +13,30 @@ const WithState = toRenderProps(withState('anchorEl', 'updateAnchorEl', null));
 
 
 const NavigationItem = (props) => {
+	let item = props.navItem;
 	let liClasses = "menu-item menu-item-type-custom menu-item-object-custom";
 	let childClasses = "menu-item menu-item-type-taxonomy menu-item-object-nova_menu";
-	if (props.childElements.length > 0) 
+	if (item.childElements && item.childElements.length > 0) 
 		liClasses += "menu-item-has-children has_children"
-
 	return (
-		<li className={liClasses} ><a href="#">{props.name}</a> 
-		{props.childElements.length > 0 &&
-			<span class="dropdown-toggle"></span>
-		<ul class="sub-menu nav-menu" > {/*style="left: 469.354px;"*/}
-		{props.childElements.map(function(child, idx){
+		<li className={liClasses} aria-haspopup="true"><a href="#">{item.name}</a> 
+		{item.childElements && item.childElements.length > 0 && <React.Fragment>
+		<span className="dropdown-toggle"></span>
+		<ul className="sub-menu nav-menu" >
+		{item.childElements.map(function(child, idx){
 			return (
-				<li key={idx} class={childClasses}><a href={child.route}>{child.name}</a></li>
+				<li key={idx} className={childClasses}><a href={child.route}>{child.name}</a></li>
 				)
 		})}
 		</ul>
-	}
-	</li>
+		</React.Fragment>}
+		</li>
 	);
 }
 
 const NavigationItems = (props) => {
 
-	return props.map(navItem => {
+	return props.items.map(navItem => {
 		return (<NavigationItem navItem={navItem}></NavigationItem>);
 	});
 }
@@ -67,13 +67,13 @@ class Header extends Component {
 		}
 	}
 
-	SITE_BRANDING_NAME = "Мой сайт",
+	SITE_BRANDING_NAME = "Мой сайт"
 
 	/*todo: poprobovat' async*/
-	componentWillMount : function () {
+	componentWillMount() {
 		fetchCategories().then(response => {
 			let navigationItems = this.state.navigationItems;
-			let categsInd = navigationItems.map(e => e.key).indexOf('categs');
+			let categsInd = navigationItems.map(e => e.id).indexOf('categs');
 			let categs = navigationItems[categsInd];
 			categs.childElements = response;
 			navigationItems[categsInd] = categs;
@@ -84,22 +84,22 @@ class Header extends Component {
 	render () {
 		return (
 			<React.Fragment>
-				<header id="masthead" class="site-header">
-					<div class="container header-container">
-						<div class="navbar-header">
-							<div class="site-branding">
-								{SITE_BRANDING_NAME}
+				<header id="masthead" className="site-header">
+					<div className="container header-container">
+						<div className="navbar-header">
+							<div className="site-branding">
+								{this.SITE_BRANDING_NAME}
 							</div>
 
-							<span class="menu-toggle-content">
-								<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><i class="fa fa-bars" aria-hidden="true"></i></button>
+							<span className="menu-toggle-content">
+								<button className="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><i className="fa fa-bars" aria-hidden="true"></i></button>
 							</span>
 						</div>
 
-						<nav id="site-navigation" class="main-navigation site-navigation">
-							<div class="menu-primary-menu-container">
-								<ul id="primary-menu" class="menu nav-menu">
-									<NavigationItems />
+						<nav id="site-navigation" className="main-navigation site-navigation">
+							<div className="menu-primary-menu-container">
+								<ul id="primary-menu" className="menu nav-menu">
+									<NavigationItems items={this.state.navigationItems}/>
 								</ul>
 							</div> 
 						</nav>
