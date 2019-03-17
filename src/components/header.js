@@ -37,7 +37,7 @@ const NavigationItem = (props) => {
 const NavigationItems = (props) => {
 
 	return props.items.map(navItem => {
-		return (<NavigationItem navItem={navItem}></NavigationItem>);
+		return (<NavigationItem key={navItem.id} navItem={navItem}></NavigationItem>);
 	});
 }
 
