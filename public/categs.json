@@ -1,5 +1,10 @@
 [  
    {  
+      "id":0,
+      "name":"Все", 
+      "route":"all"
+   },
+   {  
       "id":1,
       "name":"Кухни", 
       "route":"kitchens"

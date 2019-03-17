@@ -43,11 +43,15 @@ const categoriesURL = `${API_ROOT}/categs.json`;
     });
 };*/
 
-export function fetchItems() {
+/*API.GET_ITEMS + '/' + categoryKey*/
+export function fetchItems(categoryKey) {
   return axios
-      .get(API.GET_ITEMS)
+      .get(itemsURL)
       .then(function (response) {
-        return response.data;
+        if (categoryKey === "all")
+          return response.data;
+
+        return response.data.filter((elem) => {return elem.category === categoryKey});
       })
       .catch(function (error) {
         console.log(error);
@@ -55,6 +59,9 @@ export function fetchItems() {
       
 }
 
+/*
+possible categories : all , ....
+*/
 export function fetchCategories() {
   if (cache.categories.length > 0)
     return cache.categories;
