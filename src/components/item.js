@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
-import {ItemGridFactor} from '../constants'
-import Grid from '@material-ui/core/Grid';
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Modal from '@material-ui/core/Modal';
+import {CurrencySign} from '../constants'
 
 class Item extends Component {
-
+	/*gridFactor : ItemGridFactor, */
 	state = {
-		gridFactor : ItemGridFactor, 
 		open : false,  
 		item : {}
 	}
@@ -21,44 +16,25 @@ class Item extends Component {
 		this.setState({ open: false });
 	};
 
-	//props : item
 	showDetailed(id) {
 		console.log('show detailed for item with id ' + id)
 	}
 
 	render() {
-		/*const style = {
-			background-image: 'url(' + this.props.item.picture + ')',
-		};*/
-		var divStyle = {
-			backgroundImage: 'url(' + this.props.item.picture  + ')',
-		};
-
 		return (
-			<div class="item">
-				<a onClick={this.handleOpen}>
-				<div class="circle-wrap">
-				<div class="media work-2" style={divStyle}></div>
-				</div>
-				<div class="client-name">
-				<h2>Name</h2>
-				<h3>{this.props.name}</h3>
-				</div>
-			<div class="project">		{/*Todo: rename classes*/}
-			<h2>Price</h2>
-			<h3>{this.props.item.price}</h3>
+			<React.Fragment>
+			<div className="product-image"><a href=""><img src={this.props.item.picture} className="attachment-shop_catalog size-shop_catalog wp-post-image"/></a></div>
+			<div className="product-header">
+					<h3 className="product-title"><a href="" className="shop-item-title-link">{this.props.item.title}</a></h3>
+					<div className="price">
+						<span className="woocommerce-Price-amount amount">
+							<span className="woocommerce-Price-currencySymbol">{CurrencySign}</span>
+							{this.props.item.price}
+						</span>
+					</div>
 			</div>
-			</a>
-			<Modal
-		          aria-labelledby="simple-modal-title"
-		          aria-describedby="simple-modal-description"
-		          open={this.state.open}
-		          onClose={this.handleClose}
-		    >
-		    
-		    </Modal>
-			</div>
-		)
+			</React.Fragment>
+			);
 	}
 }
 

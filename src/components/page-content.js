@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import InlineCategories from './inline-categories'
-import Item from './item'
+import ItemsContainer from './items-container'
 import { fetchItems } from '../services/api'
 
 class PageContent extends Component {
@@ -14,7 +14,7 @@ class PageContent extends Component {
 	}
 
 	handleSelectedCategory = (newSelected) => {
-		this.setState(selectedCategory : newSelected);
+		this.setState({selectedCategory : newSelected});
 		this.loadItems();
 	}
 
@@ -35,8 +35,10 @@ class PageContent extends Component {
 
   	render() {
   		return (	
-    		<InlineCategories onCategorySelected={this.handleSelectedCategory}/>
-    		<ItemsContainer items={this.state.items}/>
+  			<React.Fragment>
+	    		<InlineCategories onCategorySelected={this.handleSelectedCategory}/>
+	    		<ItemsContainer items={this.state.items}/>
+    		</React.Fragment>
     	);
   	}
 }

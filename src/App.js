@@ -7,6 +7,8 @@ import './App.css';
 import Home from './components/home';
 import Header from './components/header';
 import PageBanner from './components/page-banner';
+import InlineCategories from './components/inline-categories';
+import PageContent from './components/page-content';
 
 /*className={classes.root}*/
 class App extends Component {
@@ -20,6 +22,7 @@ class App extends Component {
         <div id="hero">
           <PageBanner/>
         </div>
+        <PageContent/>
       </div>
     );
   }
