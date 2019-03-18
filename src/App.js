@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import './App.css';
+import './woocommerce.css';
 
 import Home from './components/home';
 import Header from './components/header';
