@@ -22,8 +22,10 @@ class Item extends Component {
 
 	render() {
 		return (
-			<React.Fragment>
-			<div className="product-image"><a href=""><img src={this.props.item.picture} className="attachment-shop_catalog size-shop_catalog wp-post-image"/></a></div>
+			<div className="product type-product status-publish has-post-thumbnail product_cat-kitchen first instock shipping-taxable purchasable product-type-simple">
+			<div className="product-image">
+				<a><img  width="370" height="270" alt="" scale="0" data-opt-loaded="true" data-opt-lazy-loaded="true" data-opt-otimized-width="295" data-opt-optimized-height="214" src={this.props.item.picture} className="attachment-shop_catalog size-shop_catalog wp-post-image"/></a>
+			</div>
 			<div className="product-header">
 					<h3 className="product-title"><a href="" className="shop-item-title-link">{this.props.item.title}</a></h3>
 					<div className="price">
@@ -33,7 +35,7 @@ class Item extends Component {
 						</span>
 					</div>
 			</div>
-			</React.Fragment>
+			</div>
 			);
 	}
 }

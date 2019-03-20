@@ -18,8 +18,8 @@ const ItemsList = ({ items }) => {
 		rows[i] = items.slice(i * 3, (i + 1) * 3);
 	}
 	debugger;
-	return rows.map(row => {
-	    return (<Grid container item xs={12}  className="products"> <GridRow row={row}/> </Grid>);
+	return rows.map((row, ind) => {
+	    return (<Grid container item xs={12}  className="products" key={ind}> <GridRow row={row}/> </Grid>);
 	});
 };
 
