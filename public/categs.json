@@ -2,21 +2,25 @@
    {  
       "id":0,
       "name":"Все", 
-      "route":"all"
+      "route":"all", 
+      "key" : "all" 
    },
    {  
       "id":1,
       "name":"Кухни", 
-      "route":"kitchens"
+      "route":"kitchens", 
+      "key" : "kitchens"
    },
    {  
       "id":2,
       "name":"Шкафы", 
-      "route":"shkaf"
+      "route":"shkaf", 
+      "key" : "shkaf"
    },
    {  
       "id":3,
       "name":"Прихожие", 
-      "route":"hall"
+      "route":"hall", 
+      "key" : "hall"
    }
 ]

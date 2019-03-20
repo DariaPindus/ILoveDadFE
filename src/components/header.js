@@ -4,10 +4,11 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import toRenderProps from 'recompose/toRenderProps';
 import withState from 'recompose/withState';
+import Category from './category';
 
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-import { fetchCategories } from '../services/api'
+import { fetchCategories } from '../services/api';
 
 const WithState = toRenderProps(withState('anchorEl', 'updateAnchorEl', null));
 
@@ -25,7 +26,7 @@ const NavigationItem = (props) => {
 		<ul className="sub-menu nav-menu" >
 		{item.childElements.map(function(child, idx){
 			return (
-				<li key={idx} className={childClasses}><a href={child.route}>{child.name}</a></li>
+				<li key={idx} className={childClasses}><Category value={child}/></li>
 				)
 		})}
 		</ul>

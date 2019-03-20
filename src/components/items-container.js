@@ -3,11 +3,12 @@ import Grid from '@material-ui/core/Grid';
 import Item from './item';
 import { css } from '@emotion/core';
 import { ClipLoader } from 'react-spinners';
+import { fetchItems } from '../services/api';
 
 const GridRow = ({row}) => {
 	//debugger;
 	return row.map(i => {
-	    return (<Grid item xs={4}> <Item item={i} key={i.id} /> </Grid>);
+		return (<Grid item xs={4}> <Item item={i} key={i.id} /> </Grid>);
 	});
 }
 
@@ -19,7 +20,7 @@ const ItemsList = ({ items }) => {
 	}
 	debugger;
 	return rows.map((row, ind) => {
-	    return (<Grid container item xs={12}  className="products" key={ind}> <GridRow row={row}/> </Grid>);
+		return (<Grid container item xs={12}  className="products" key={ind}> <GridRow row={row}/> </Grid>);
 	});
 };
 
@@ -28,11 +29,28 @@ class ItemsContainer extends Component {
 		super(props);
 	}
 
-		state = {
-			isLoading: false
-		};
+	state = {
+		isLoading: false, 
+		items : []
+	};
 
-  render() {
+
+	componentDidMount() {
+		this.loadItems();
+	}
+
+	loadItems() {
+		debugger;
+		let cat = this.props.match.catgKey;
+		this.setState({isLoading : true});
+		fetchItems(cat).then(
+			response => {
+				this.setState({items: response});
+				this.setState({isLoading : false});
+			});
+	}
+
+	render() {
 
     const {isLoading} = this.state.isLoading;		//how it works?
 
@@ -40,31 +58,31 @@ class ItemsContainer extends Component {
 			// does isLoading work 
 			//css={override}
 
-		if (this.state.isLoading) {
+			if (this.state.isLoading) {
 	      // Render loading state ...
 	      return (<ClipLoader
-		          sizeUnit={"px"}
-		          size={150}
-		          color={'#123abc'}
-		          loading={this.state.isLoading}
-		        />);
-	    } else {
+	      	sizeUnit={"px"}
+	      	size={150}
+	      	color={'#123abc'}
+	      	loading={this.state.isLoading}
+	      	/>);
+	  } else {
 	      // Render real UI ...
-			return (
-				<div id="content" className="site-content">
-					<div id="primary" className="content-area">
-						<main id="main" className="site-main" role="main">	
-							<div id="primary" className="content-area">
-								<div className="container">
-									<ItemsList items={this.props.items} />
-								</div>
-							</div>
-						</main>
-					</div>
-				</div>
-			);
-	    }
-  	}
+	      return (
+	      	<div id="content" className="site-content">
+	      	<div id="primary" className="content-area">
+	      	<main id="main" className="site-main" role="main">	
+	      	<div id="primary" className="content-area">
+	      	<div className="container">
+	      	<ItemsList items={this.state.items} />
+	      	</div>
+	      	</div>
+	      	</main>
+	      	</div>
+	      	</div>
+	      	);
+	  }
+	}
 }
 
 export default ItemsContainer;

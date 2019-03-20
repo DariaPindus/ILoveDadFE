@@ -10,6 +10,7 @@ import Header from './components/header';
 import PageBanner from './components/page-banner';
 import InlineCategories from './components/inline-categories';
 import PageContent from './components/page-content';
+import { Router, Route, Switch, Redirect } from "react-router-dom";
 
 /*className={classes.root}*/
 class App extends Component {
@@ -18,13 +19,16 @@ class App extends Component {
   	document.body.classList.add('archive', 'post-type-archive', 'post-type-archive-product','woocommerce',
   								'woocommerce-page','woocommerce-js','hfeed');	
     return (
-      <div id="page" className="site">
-      	<Header/>
-        <div id="hero">
-          <PageBanner/>
+      <Router>
+        <div id="page" className="site">
+        	<Header/>
+      
+          <Route exact path="/" render={() => (
+              <Redirect to="/categories/all"/>
+          )}/>
+          <Route path="/categories" component={Home} />
         </div>
-        <PageContent/>
-      </div>
+      </Router>
     );
   }
 }

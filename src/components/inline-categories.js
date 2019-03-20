@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { fetchCategories } from '../services/api';
+import Category from './category';
 
 class InlineCategories extends Component {
   constructor(props) {
@@ -8,13 +9,6 @@ class InlineCategories extends Component {
       selectedCategory : 'all', 
       categories : []
     }
-  }
-
-  componentWillMount() {
-    fetchCategories().then(response => {
-      let categories = response;
-      this.setState({categories : categories});
-    });
   }
 
   handleCategorySelected(category) {
@@ -31,9 +25,9 @@ class InlineCategories extends Component {
             <nav id="categories-menu" className="categories-navigation site-navigation">
               <div className="menu-shop-menu-container">
                 <ul id="categories-menu" className="menu nav-menu">
-                  {this.state.categories.map(function(cat, idx){
+                  {this.props.categories.map(function(cat, idx){
                     return (
-                      <li key={idx} className={liClassName}><a onClick={() => this.handleCategorySelected(cat.id)}>{cat.name}</a></li>
+                      <li key={idx} className={liClassName}><Category value={cat}/></li>
                       )
                   })}
                 </ul>

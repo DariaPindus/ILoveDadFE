@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import InlineCategories from './inline-categories'
 import ItemsContainer from './items-container'
-import { fetchItems } from '../services/api'
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 class PageContent extends Component {
 	constructor(props) {
@@ -9,35 +9,22 @@ class PageContent extends Component {
 		this.state = {
 			selectedCategory : 'all', 
 			isLoading : false, 
-			items : []
+			items : [], 
+			categories : []
 		};
 	}
-
-	handleSelectedCategory = (newSelected) => {
-		this.setState({selectedCategory : newSelected});
-		this.loadItems();
-	}
-
-	componentDidMount() {
-		this.loadItems();
-	}
-
-	loadItems() {
-		debugger;
-		let cat = this.state.selectedCategory;
-		this.setState({isLoading : true});
-		fetchItems(cat).then(
-			response => {
-				this.setState({items: response});
-				this.setState({isLoading : false});
-			});
-	}
-
+	
   	render() {
   		return (	
   			<React.Fragment>
-	    		<InlineCategories onCategorySelected={this.handleSelectedCategory}/>
-	    		<ItemsContainer items={this.state.items}/>
+	    		<InlineCategories categories={this.state.categories}/>
+	    		{this.state.categories.map((category, i) => (
+	    			<Route 
+	    				path={category.route}
+	    				render={() => <ItemsContainer filter={category.key}/>}
+	    			/>
+	    		))}
+	    		
     		</React.Fragment>
     	);
   	}
