@@ -1,10 +1,17 @@
 import axios from 'axios';
 
 import * as API from './api_constants'
+import { API_ROOT } from '../api-config';
 
+//todo : temp until I find something smarter
+let cache = {
+  categories : []
+}
 
-const itemsURL = process.env.PUBLIC_URL + '/mock_data.json';// 'C:\\Users\\Asus\\Documents\\react-tutorial\\my-app\\src\\mock_data.json';
-
+/*const itemsURL = process.env.PUBLIC_URL + '/mock/items.json';// 'C:\\Users\\Asus\\Documents\\react-tutorial\\my-app\\src\\mock_data.json';
+const categoriesURL = process.env.PUBLIC_URL + '/mock/categs.json'*/
+const itemsURL = `${API_ROOT}/items.json`;// 'C:\\Users\\Asus\\Documents\\react-tutorial\\my-app\\src\\mock_data.json';
+const categoriesURL = `${API_ROOT}/categs.json`;
 // export const itemsAPI = "http://localhost:8001/api/items";
 /*export const fetchItems = (filters, sortBy, callback) => dispatch => {
   return axios
@@ -36,14 +43,37 @@ const itemsURL = process.env.PUBLIC_URL + '/mock_data.json';// 'C:\\Users\\Asus\
     });
 };*/
 
-export function fetchItems() {
+/*API.GET_ITEMS + '/' + categoryKey*/
+export function fetchItems(categoryKey) {
   return axios
-      .get(API.GET_ITEMS)
+      .get(itemsURL)
       .then(function (response) {
-        return response.data;
+        if (categoryKey === "all")
+          return response.data;
+
+        return response.data.filter((elem) => {return elem.category === categoryKey});
       })
       .catch(function (error) {
         console.log(error);
       });
       
+}
+
+/*
+possible categories : all , ....
+*/
+export function fetchCategories() {
+  if (cache.categories.length > 0)
+    return cache.categories;
+
+  let curl = process.env.PUBLIC_URL + '/items.json';
+  return axios
+    .get(categoriesURL)
+    .then(function (response) {
+      cache.categories = response.data;
+      return response.data;
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
 }

@@ -1,28 +1,17 @@
 import React, { Component } from 'react';
+import Grid from '@material-ui/core/Grid';
+import Item from './item';
 import { css } from '@emotion/core';
 import { ClipLoader } from 'react-spinners';
-import Grid from '@material-ui/core/Grid';
+import { fetchItems } from '../services/api';
 
-import Item from './item'
-import { fetchItems } from '../services/api'
+const GridRow = ({row}) => {
+	//debugger;
+	return row.map(i => {
+		return (<Grid item xs={4}> <Item item={i} key={i.id} /> </Grid>);
+	});
+}
 
-//todo : make spinner global for app 
-const override = css`
-    display: block;
-    margin: 0 auto;
-    border-color: red;
-`;
-
-/*function ItemsList(props) {
-  const items = props.items;
-  const listItems = items.map((item) =>
-    <Item item={number}/>
-  );
-  return (
-
-    <ul>{listItems}</ul>
-  );
-}*/
 const ItemsList = ({ items }) => {
 	let rows = [[]];
 
@@ -30,33 +19,31 @@ const ItemsList = ({ items }) => {
 		rows[i] = items.slice(i * 3, (i + 1) * 3);
 	}
 	debugger;
-	return rows.map(row => {
-	    return (<Grid container item xs={12}> <GridRow row={row}/> </Grid>);
+	return rows.map((row, ind) => {
+		return (<Grid container item xs={12}  className="products" key={ind}> <GridRow row={row}/> </Grid>);
 	});
 };
 
-const GridRow = ({row}) => {
-	//debugger;
-	return row.map(i => {
-	    return (<Grid item xs={4}> <Item item={i} key={i.id} /> </Grid>);
-	});
-}
-
-class ItemsContainter extends Component {
+class ItemsContainer extends Component {
+	constructor(props) {
+		super(props);
+	}
 
 	state = {
 		isLoading: false, 
 		items : []
 	};
 
+
 	componentDidMount() {
-		this.initItems();
+		this.loadItems();
 	}
 
-	initItems() {
+	loadItems() {
 		debugger;
+		let cat = this.props.match.params.catgKey;
 		this.setState({isLoading : true});
-		fetchItems().then(
+		fetchItems(cat).then(
 			response => {
 				this.setState({items: response});
 				this.setState({isLoading : false});
@@ -64,24 +51,38 @@ class ItemsContainter extends Component {
 	}
 
 	render() {
-		const {isLoading} = this.state.isLoading;		//how it works?
+
+    const {isLoading} = this.state.isLoading;		//how it works?
+
 
 			// does isLoading work 
 			//css={override}
 
-		if (this.state.isLoading) {
+			if (this.state.isLoading) {
 	      // Render loading state ...
 	      return (<ClipLoader
-		          sizeUnit={"px"}
-		          size={150}
-		          color={'#123abc'}
-		          loading={this.state.isLoading}
-		        />);
-	    } else {
+	      	sizeUnit={"px"}
+	      	size={150}
+	      	color={'#123abc'}
+	      	loading={this.state.isLoading}
+	      	/>);
+	  } else {
 	      // Render real UI ...
-			return (<ItemsList items={this.state.items} />);
-	    }
+	      return (
+	      	<div id="content" className="site-content">
+	      	<div id="primary" className="content-area">
+	      	<main id="main" className="site-main" role="main">	
+	      	<div id="primary" className="content-area">
+	      	<div className="container">
+	      	<ItemsList items={this.state.items} />
+	      	</div>
+	      	</div>
+	      	</main>
+	      	</div>
+	      	</div>
+	      	);
+	  }
 	}
-} 
+}
 
-export default ItemsContainter;
+export default ItemsContainer;
