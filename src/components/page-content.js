@@ -17,7 +17,7 @@ class PageContent extends Component {
   	render() {
   		return (	
   			<React.Fragment>
-	    		<InlineCategories categories={this.state.categories}/>
+	    		
 	    		{this.state.categories.map((category, i) => (
 	    			<Route 
 	    				path={category.route}

@@ -8,8 +8,8 @@
    {  
       "id":1,
       "name":"Кухни", 
-      "route":"kitchens", 
-      "key" : "kitchens"
+      "route":"kitchen", 
+      "key" : "kitchen"
    },
    {  
       "id":2,

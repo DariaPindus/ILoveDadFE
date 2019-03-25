@@ -4,7 +4,7 @@ class Category extends Component {
 
   	render() {
   		return (	
-  			<a href={"/" + this.props.value.route}>this.props.value.name</a>
+  			<a href={"/categories/" + this.props.value.route}>{this.props.value.name}</a>
     	);
   	}
 }

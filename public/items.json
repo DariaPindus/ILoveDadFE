@@ -9,7 +9,8 @@
     ],
     "colors": [
       "black"
-    ]
+    ], 
+    "category" : "kitchen"
   },
   {
     "id": 38,
@@ -23,7 +24,8 @@
     ],
     "colors": [
       "white"
-    ]
+    ], 
+    "category" : "shkaf"
   },
   {
     "id": 79,
@@ -44,7 +46,8 @@
     "available_size": [],
     "colors": [
       "red"
-    ]
+    ], 
+    "category" : "kitchen"
   },
   {
     "id": 10,
@@ -60,7 +63,8 @@
     "colors": [
       "black",
       "white"
-    ]
+    ], 
+    "category" : "kitchen"
   },
   {
     "id": 171,
@@ -73,7 +77,8 @@
     ],
     "colors": [
       "black"
-    ]
+    ], 
+    "category" : "shkaf"
   },
   {
     "id": 114,
@@ -86,7 +91,8 @@
     "colors": [
       "red",
       "red"
-    ]
+    ], 
+    "category" : "hall"
   },
   {
     "id": 42,
@@ -99,7 +105,8 @@
     ],
     "colors": [
       "white"
-    ]
+    ], 
+    "category" : "hall"
   },
   {
     "id": 200,
@@ -113,7 +120,8 @@
     "colors": [
       "red",
       "white"
-    ]
+    ], 
+    "category" : "kitchen"
   },
   {
     "id": 23,
@@ -125,7 +133,8 @@
     ],
     "colors": [
       "red"
-    ]
+    ], 
+    "category" : "shkaf"
   },
   {
     "id": 173,
@@ -137,7 +146,8 @@
     ],
     "colors": [
       "red"
-    ]
+    ], 
+    "category" : "hall"
   },
   {
     "id": 142,
@@ -163,7 +173,8 @@
     "colors": [
       "white",
       "black"
-    ]
+    ], 
+    "category" : "kitchen"
   },
   {
     "id": 35,
@@ -178,7 +189,8 @@
     "colors": [
       "red",
       "red"
-    ]
+    ], 
+    "category" : "kitchen"
   },
   {
     "id": 127,
@@ -191,7 +203,8 @@
     "colors": [
       "white",
       "red"
-    ]
+    ], 
+    "category" : "kitchen"
   },
   {
     "id": 31,
@@ -207,7 +220,8 @@
     "colors": [
       "white",
       "white"
-    ]
+    ], 
+    "category" : "hall"
   },
   {
     "id": 173,
@@ -218,7 +232,8 @@
     "colors": [
       "red",
       "red"
-    ]
+    ], 
+    "category" : "hall"
   },
   {
     "id": 119,
@@ -233,7 +248,8 @@
     "colors": [
       "black",
       "white"
-    ]
+    ], 
+    "category" : "hall"
   },
   {
     "id": 62,
@@ -243,7 +259,8 @@
     "available_size": [],
     "colors": [
       "white"
-    ]
+    ], 
+    "category" : "shkaf"
   },
   {
     "id": 177,
@@ -253,6 +270,7 @@
     "available_size": [],
     "colors": [
       "red"
-    ]
+    ], 
+    "category" : "shkaf"
   }
 ]

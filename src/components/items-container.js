@@ -41,7 +41,7 @@ class ItemsContainer extends Component {
 
 	loadItems() {
 		debugger;
-		let cat = this.props.match.catgKey;
+		let cat = this.props.match.params.catgKey;
 		this.setState({isLoading : true});
 		fetchItems(cat).then(
 			response => {

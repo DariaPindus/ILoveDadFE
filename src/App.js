@@ -10,7 +10,7 @@ import Header from './components/header';
 import PageBanner from './components/page-banner';
 import InlineCategories from './components/inline-categories';
 import PageContent from './components/page-content';
-import { Router, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router , Route, Switch, Redirect } from "react-router-dom";
 
 /*className={classes.root}*/
 class App extends Component {

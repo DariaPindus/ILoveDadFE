@@ -32,7 +32,7 @@ class Home extends Component {
 	            <PageBanner/>
 	          </div>
 	          <InlineCategories categories={this.state.categories}/>
-	          <Route path={"/categories/:catgKey"} component={ItemsContainer} />
+	          <Route path={`/categories/:catgKey`} component={ItemsContainer} />
 	          {/*<Route
 		        exact
 		        path={match.path}
