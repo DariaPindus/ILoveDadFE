@@ -3892,6 +3892,7 @@ object {
 
 .site-footer {
   background-color: #fff;
+  padding: 100px 0;
 }
 
 .footer-widgets {
@@ -6060,4 +6061,23 @@ input[type="submit"],
     .main-navigation ul {
         padding-right: 0;
     }
+}
+
+.textwidget div {
+  text-align:center; 
+  font-family:'Work Sans', sans-serif;
+}
+
+.textwidget h2 {
+  font-family:'Work Sans', sans-serif; 
+  text-transform: none;
+  font-weight: 800; 
+  padding-bottom: 14px; 
+  font-size:35px; 
+  letter-spacing: .1em;
+}
+
+.textwidget span {
+  letter-spacing: 0.1em; 
+  line-height: 30px;
 }

@@ -57,6 +57,24 @@ function ContactPageBanner(){
 	);
 }
 
+function ContactInfo() {
+	return(
+		<footer id="colophon" class="site-footer">
+			<div class="container">
+				<div class="textwidget">
+					<div>
+						<h2>Пиндус и Ко</h2>
+						<span>
+							Одесса <br/>
+							Телефон : +380638112358 (рандом)
+						</span>
+					</div>
+				</div>
+			</div>
+		</footer>
+	);
+}
+
 class Home extends Component {
 
 	constructor(props) {
@@ -91,6 +109,8 @@ class Home extends Component {
 			<section className="ribbon-sidebar">
 				<ContactPageBanner/>
 			</section>
+
+			<ContactInfo/>
 	          {/*<Route
 		        exact
 		        path={match.path}
