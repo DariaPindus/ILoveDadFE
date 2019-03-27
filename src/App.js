@@ -6,7 +6,6 @@ import './App.css';
 import './woocommerce.css';
 
 import Home from './components/home';
-import Header from './components/header';
 import PageBanner from './components/page-banner';
 import InlineCategories from './components/inline-categories';
 import PageContent from './components/page-content';
@@ -20,14 +19,11 @@ class App extends Component {
   								'woocommerce-page','woocommerce-js','hfeed');	
     return (
       <Router>
-        <div id="page" className="site">
-        	<Header/>
       
           <Route exact path="/" render={() => (
               <Redirect to="/categories/all"/>
           )}/>
           <Route path="/categories" component={Home} />
-        </div>
       </Router>
     );
   }

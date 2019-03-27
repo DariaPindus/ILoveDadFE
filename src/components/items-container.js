@@ -39,6 +39,11 @@ class ItemsContainer extends Component {
 		this.loadItems();
 	}
 
+	componentDidUpdate(prevProps, prevState){
+		if (prevProps.match.params.catgKey !== this.props.match.params.catgKey)
+			this.loadItems();
+	}
+
 	loadItems() {
 		debugger;
 		let cat = this.props.match.params.catgKey;

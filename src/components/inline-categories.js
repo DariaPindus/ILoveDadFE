@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { fetchCategories } from '../services/api';
 import Category from './category';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 class InlineCategories extends Component {
   constructor(props) {
