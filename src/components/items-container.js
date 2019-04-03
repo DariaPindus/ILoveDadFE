@@ -18,7 +18,7 @@ const ItemsList = ({ items }) => {
 	for (let i = 0; i < Math.ceil(items.length / 3); i++){
 		rows[i] = items.slice(i * 3, (i + 1) * 3);
 	}
-	debugger;
+//	debugger;
 	return rows.map((row, ind) => {
 		return (<Grid container item xs={12}  className="products" key={ind}> <GridRow row={row}/> </Grid>);
 	});
@@ -45,7 +45,7 @@ class ItemsContainer extends Component {
 	}
 
 	loadItems() {
-		debugger;
+//		debugger;
 		let cat = this.props.match.params.catgKey;
 		this.setState({isLoading : true});
 		fetchItems(cat).then(

@@ -4,12 +4,12 @@ import Header from './header';
 import PageBanner from './page-banner';
 import InlineCategories from './inline-categories';
 import ItemsContainer from './items-container';
+import ContactPageBanner from './contact-banner';
 
 import { Router, Route } from "react-router-dom";
 import { fetchCategories } from '../services/api';
 
 const PAGE_BANNER_URL = "https://mllj2j8xvfl0.i.optimole.com/w:auto/h:auto/q:90/https://s20206.pcdn.co/wp-content/uploads/sites/95/2017/01/ceramic-kettle-header-1920x615.jpg";
-const CONTACT_BANNER_URL = "/architectural-design_cut.jpg";
 
 
 function MainPageBanner(){
@@ -29,30 +29,6 @@ function MainPageBanner(){
 				</div>
 			</div>
 			<div className="hero-image" style={backgroundStyle}></div>
-		</div>
-	);
-}
-
-function ContactPageBanner(){
-	const backgroundStyle = {
-  		background: 'url(' + CONTACT_BANNER_URL + ')', 
-  		backgroundSize: 'cover'
-  	};
-
-	return (
-		<div id="belise_ribbon-widget-4">
-			<div className="ribbon">
-				<div className="container">
-					<div className="row">
-						<div class="text-center ribbon-content">
-							<h5 className="ribbon-content">Свяжитесь с нами</h5>
-							<h3 >Если у вас возникли вопросы, и вы хотели бы с нами связаться - воспользуйтесь формой.</h3>
-							<a className="btn">Связаться</a>
-						</div>
-					</div>
-				</div>
-				<div className="ribbon-image" style={backgroundStyle}></div>
-			</div>
 		</div>
 	);
 }
