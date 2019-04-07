@@ -65,9 +65,15 @@ class ContactForm extends Component {
 
 	state = {
 		contactForm: {
+			contactName : "", 
 			contactPhone : "", 
 			contactMethod : "", 
-			mesage : ""
+			message : ""
+		}, 
+		errors : {
+			contactName : "", 
+			contactPhone : "", 
+			message : ""
 		}
 	};
 
@@ -79,59 +85,88 @@ class ContactForm extends Component {
   		console.log(`Form : ${JSON.stringify(this.state.contactForm)}`)
   	};
 
+  	canSend() {
+  		return !this.state.errors.contactName &&
+  				!this.state.errors.contactPhone &&
+  				!this.state.errors.message
+  	}
+
 	render() {
     	const { classes } = this.props;
 		
 		return (	
 			<Modal open={this.props.open}
 					onClose={this.props.handleClose}>
-				<div style={getModalStyle()} className={classes.paper}>
-					<form className={classes.container} noValidate autoComplete="off">
-						<TextField
-							required
-							id="standard-required"
-							label="Контактный номер"
-							defaultValue=""
-							value={this.state.contactForm.contactPhone}
-							className={classes.textField}
-							margin="normal"
-						/>
+						<div class="wrap-contact2">
+							<form class="contact2-form validate-form">
+								<span class="contact2-form-title">
+									Contact Us
+								</span>
 
-						<TextField
-				          id="standard-select-currency"
-				          select
-				          label="Select"
-				          className={classes.textField}
-				          value={this.state.contactForm.contactMethod}
-				          onChange={this.handleChange('contactMethod')}
-				          SelectProps={{
-				            MenuProps: {
-				              className: classes.menu,
-				            },
-				          }}
-				          helperText="Выберите способ связи"
-				          margin="normal"
-				        >
-				          {contactMethods.map(option => (
-				            <MenuItem key={option.value} value={option.value}>
-				              {option.label}
-				            </MenuItem>
-				          ))}
-				        </TextField>
+								<TextField
+									required
+									id="standard-required"
+									label="Имя"
+									fullWidth
+						          	error={this.state.errors.contactName.length > 0 }
+						          	helperText={this.state.errors.contactName}
+									value={this.state.contactForm.contactName}
+									margin="normal"
+								/>
 
-				        <FormControl fullWidth className={classes.margin}>
-				          <InputLabel htmlFor="adornment-amount">Сообщение</InputLabel>
-				          <Input
-				            id="adornment-amount"
-				            value={this.state.contactForm.message}
-				          />
-				        </FormControl>
+								<TextField
+						          select
+						          fullWidth
+						          error={this.state.errors.length === 0 ? false : true }
+						          label="Способ связи"
+						          className={classes.textField}
+						          value={this.state.contactForm.contactMethod}
+						          onChange={this.handleChange('contactForm.contactMethod')}
+						          SelectProps={{
+						            MenuProps: {
+						              className: classes.menu,
+						            },
+						          }}
+						          margin="normal"
+						        >
+						        {contactMethods.map(option => (
+						            <MenuItem key={option.value} value={option.value}>
+						              {option.label}
+						            </MenuItem>
+						          ))}
+						        </TextField>
 
-				        <Button variant="outlined" color="inherit" className={classes.button} onClick={this.sendContactForm}>
-					        Отправить 
-					    </Button>
-					</form>
-				</div>
+						        <TextField
+									required
+									id="standard-required"
+									label="Номер телефона"
+									fullWidth
+						          	error={this.state.errors.contactPhone.length > 0 }
+						          	helperText={this.state.errors.contactPhone}
+									value={this.state.contactForm.contactPhone}
+									margin="normal"
+								/>
+
+								<TextField
+									fullWidth
+									required
+								          id="standard-multiline-flexible"
+								          label="Сообщение"
+								          multiline
+								          rowsMax="4"
+								          value={this.state.contactForm.message}
+								          className={classes.textField}
+							          	error={this.state.errors.message.length > 0 }
+							          	helperText={this.state.errors.message}
+								          margin="normal"
+								        />
+
+										<Button variant="outlined" 
+												disabled={!this.canSend}>
+									        Default
+									    </Button>
+							</form>
+						</div>
 			</Modal>
 			);
 	}
