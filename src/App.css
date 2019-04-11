@@ -4048,6 +4048,14 @@ object {
     color: #7d7d80;
 }
 
+.product-img {
+    width: 355px;
+    height: 250px;
+    background-position: center;
+    background-size: cover;
+    margin : 0px;
+}
+
 /*--------------------------------------------------------------
 # Icons
 --------------------------------------------------------------*/

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ContactForm from './contact-form';
 
-const CONTACT_BANNER_URL = "/architectural-design_cut.jpg";
+const CONTACT_BANNER_URL = "/img/architectural-design_cut.jpg";
 
 const backgroundStyle = {
   		background: 'url(' + CONTACT_BANNER_URL + ')', 
