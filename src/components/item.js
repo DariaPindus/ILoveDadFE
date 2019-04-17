@@ -26,18 +26,18 @@ class Item extends Component {
 	  	};
 		return (
 			<div className="product type-product status-publish has-post-thumbnail product_cat-kitchen first instock shipping-taxable purchasable product-type-simple">
-			<div className="product-image">
-				<div class="product-img" style={style}></div>
-			</div>
-			<div className="product-header">
-					<h3 className="product-title"><a href="" className="shop-item-title-link">{this.props.item.title}</a></h3>
-					<div className="price">
-						<span className="woocommerce-Price-amount amount">
-							<span className="woocommerce-Price-currencySymbol">{CurrencySign}</span>
-							{this.props.item.price}
-						</span>
-					</div>
-			</div>
+				<div className="product-image">
+					<div class="product-img" style={style}></div>
+				</div>
+				<div className="product-header">
+						<h3 className="product-title"><a href="" className="shop-item-title-link">{this.props.item.title}</a></h3>
+						<div className="price">
+							<span className="woocommerce-Price-amount amount">
+								<span className="woocommerce-Price-currencySymbol">{CurrencySign}</span>
+								{this.props.item.price}
+							</span>
+						</div>
+				</div>
 			</div>
 			);
 	}

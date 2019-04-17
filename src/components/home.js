@@ -25,7 +25,6 @@ function MainPageBanner(){
 		        <div className="container">
 					<h5 className="">Создайте уют</h5>
 					<h1 className="hero-title ">Домашний комфорт таким <br/>каким его видите Вы.</h1>
-					<a href="#content" className="hero-btn"><i className="fa fa-angle-down" aria-hidden="true"></i></a>
 				</div>
 			</div>
 			<div className="hero-image" style={backgroundStyle}></div>

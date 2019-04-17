@@ -11,6 +11,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import AWS from 'aws-sdk';
+import purple from '@material-ui/core/colors/purple';
 
 function rand() {
 	return Math.round(Math.random() * 20) - 10;
@@ -28,33 +29,30 @@ function getModalStyle() {
 }
 
 const styles = theme => ({
-	paper: {
-		position: 'absolute',
-		width: theme.spacing.unit * 50,
-		backgroundColor: theme.palette.background.paper,
-		boxShadow: theme.shadows[5],
-		padding: theme.spacing.unit * 4,
-		outline: 'none',
-	},
-	container: {
-		display: 'flex',
-		flexWrap: 'wrap',
-	},
-	textField: {
-		marginLeft: theme.spacing.unit,
-		marginRight: theme.spacing.unit,
-		width: 200,
-	},
-	dense: {
-		marginTop: 19,
-	},
-	menu: {
-		width: 200,
-	},
-	button: {
-		margin: theme.spacing.unit,
-		borderRadius : 0,
-	},
+	root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  margin: {
+    margin: theme.spacing.unit,
+  },
+  cssLabel: {
+    '&$cssFocused': {
+      color: '#706e6d',
+    },
+  },
+  cssFocused: {},
+  cssUnderline: {
+    '&:after': {
+      borderBottomColor: '#706e6d',
+    },
+  },
+  cssOutlinedInput: {
+    '&$cssFocused $notchedOutline': {
+      borderColor: '#706e6d',
+    },
+  },
+  notchedOutline: {},
 });
 
 const contactMethods = [
@@ -162,14 +160,28 @@ class ContactForm extends Component {
 						id="standard-required"
 						label="Имя"
 						fullWidth
+						InputLabelProps={{
+				          classes: {
+				            root: classes.cssLabel,
+				            focused: classes.cssFocused,
+				          },
+				        }}
+				        InputProps={{
+				          classes: {
+				            root: classes.cssOutlinedInput,
+				            focused: classes.cssFocused,
+				            notchedOutline: classes.notchedOutline,
+				          },
+				        }}
+				        margin="normal"
 						error={this.state.errors.contactName.length > 0 }
 						helperText={this.state.errors.contactName}
 						value={this.state.contactForm.contactName}
-						margin="normal"
 						/>
 						<TextField
 						select
 						fullWidth
+				        margin="normal"
 						error={this.state.errors.length === 0 ? false : true }
 						label="Способ связи"
 						value={this.state.contactForm.contactMethod}
@@ -179,7 +191,6 @@ class ContactForm extends Component {
 								className: classes.menu,
 							},
 						}}
-						margin="normal"
 						>
 						{contactMethods.map(option => (
 							<MenuItem key={option.value} value={option.value}>
@@ -189,17 +200,18 @@ class ContactForm extends Component {
 						</TextField>
 						<TextField
 						required
+				        margin="normal"
 						id="standard-required"
 						label="Номер телефона"
 						fullWidth
 						error={this.state.errors.contactPhone.length > 0 }
 						helperText={this.state.errors.contactPhone}
 						value={this.state.contactForm.contactPhone}
-						margin="normal"
 						/>
 						<TextField
 						fullWidth
 						required
+				        margin="normal"
 						id="standard-multiline-flexible"
 						label="Сообщение"
 						multiline
@@ -207,7 +219,6 @@ class ContactForm extends Component {
 						value={this.state.contactForm.message}
 						error={this.state.errors.message.length > 0 }
 						helperText={this.state.errors.message}
-						margin="normal"
 						/>
 						<Button variant="outlined" 
 						disabled={!this.canSend}
