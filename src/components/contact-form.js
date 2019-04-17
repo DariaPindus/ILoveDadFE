@@ -38,18 +38,20 @@ const styles = theme => ({
   },
   cssLabel: {
     '&$cssFocused': {
-      color: '#706e6d',
+      color: 'red',
     },
   },
-  cssFocused: {},
+  cssFocused: {
+  	color: 'red',
+  },
   cssUnderline: {
     '&:after': {
-      borderBottomColor: '#706e6d',
+      borderBottomColor: 'red',
     },
   },
   cssOutlinedInput: {
     '&$cssFocused $notchedOutline': {
-      borderColor: '#706e6d',
+      borderColor: 'red',
     },
   },
   notchedOutline: {},
@@ -80,10 +82,9 @@ class ContactForm extends Component {
 
 	constructor(props) {
 		super(props);
-		/*let myCredentials = new AWS.CognitoIdentityCredentials({IdentityPoolId:'IDENTITY_POOL_ID'});
-		let myConfig = new AWS.Config({
-			credentials: myCredentials, region: 'us-west-2'
-		});*/
+		AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+			  IdentityPoolId: 'us-east-1:5a4ddc15-5509-4b71-a071-ad410fe6dc59'
+			});
 		AWS.config.update({region: 'us-east-1'});
 	};	
 
@@ -99,25 +100,25 @@ class ContactForm extends Component {
 		let params = {
 		  Destination: { /* required */
 		    ToAddresses: [
-		      'daria.pindus@gmail.com',		    ]
+		      'dasha.custom.personal@gmail.com',		    ]
 		  },
 		  Message: { /* required */
 		    Body: { /* required */
 		      Html: {
 		       Charset: "UTF-8",
-		       Data: "HTML_FORMAT_BODY"
+		       Data: "Some body <i>text</i> with HTML"
 		      },
 		      Text: {
 		       Charset: "UTF-8",
-		       Data: "TEXT_FORMAT_BODY"
+		       Data: "More text"
 		      }
 		     },
 		     Subject: {
 		      Charset: 'UTF-8',
-		      Data: 'Test email'
+		      Data: 'Open me NOW!'
 		     }
 		    },
-		  Source: 'SENDER_EMAIL_ADDRESS', /* required */
+		  Source: 'daria.pindus@gmail.com', /* required */
 		};
 
 		// Create the promise and SES service object
@@ -222,7 +223,8 @@ class ContactForm extends Component {
 						/>
 						<Button variant="outlined" 
 						disabled={!this.canSend}
-						className={classes.button}>
+						className={classes.button}
+						onClick={this.sendEmail}>
 						Default
 						</Button>
 					</Grid>
