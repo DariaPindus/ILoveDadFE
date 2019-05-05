@@ -61,27 +61,32 @@ const contactMethods = [
 {value : "viber", 
 label : "Viber"},
 {value : "phone", 
-label : "Звонок"}
+label : "Звонок"},
+{value : "email",
+label : "Email"}
 ]
 class ContactForm extends Component {
 
 
 	state = {
-		contactForm: {
-			contactName : "", 
+		contactName : "", 
+		contactPhone : "", 
+		contactMethod : "",
+		contactEmail : "", 
+		message : "", 
+		errors : {
+			contactName : "",
 			contactPhone : "", 
 			contactMethod : "", 
-			message : ""
-		}, 
-		errors : {
-			contactName : "", 
-			contactPhone : "", 
-			message : ""
+			message : "",
+			contactEmail : "" 
 		}
 	};
 
 	constructor(props) {
 		super(props);
+		this.checkSendAvailability = this.checkSendAvailability.bind(this);
+		this.sendEmail = this.sendEmail.bind(this);
 		AWS.config.credentials = new AWS.CognitoIdentityCredentials({
 			  IdentityPoolId: 'us-east-1:5a4ddc15-5509-4b71-a071-ad410fe6dc59'
 			});
@@ -96,7 +101,26 @@ class ContactForm extends Component {
 		console.log(`Form : ${JSON.stringify(this.state.contactForm)}`)
 	};
 
-	sendEmail() {
+	/*statistics for 2 weeks*/
+	async checkSendAvailability() {
+
+		return new AWS.SES({apiVersion: '2010-12-01'}).getSendStatistics()
+			.promise().then(function(data){
+
+				if (data.SendDataPoints) {
+				  	console.log(data);           // successful response
+				  	return data.SendDataPoints.length < 90;
+				  }
+				  return false;
+			});
+	};
+
+	async sendEmail() {
+		let canBeSend = await this.checkSendAvailability();
+		if (!canBeSend) {
+			return;
+		}
+
 		let params = {
 		  Destination: { /* required */
 		    ToAddresses: [
@@ -135,9 +159,13 @@ class ContactForm extends Component {
 	}
 
 	canSend() {
-		return !this.state.errors.contactName &&
-		!this.state.errors.contactPhone &&
-		!this.state.errors.message
+		return !this.state.error || this.state.error != "";
+	}
+
+	handleUserInput (e) {
+	  const name = e.target.name;
+	  const value = e.target.value;
+	  this.setState({[name]: value});
 	}
 
 	render() {
@@ -156,6 +184,10 @@ class ContactForm extends Component {
 						<span class="contact2-form-title">
 						Contact Us
 						</span>
+
+					<br/>
+					Current form values : Name {this.state.contactName}, Method {this.state.contactMethod}
+					<br/>	
 						<TextField
 						required
 						id="standard-required"
@@ -174,19 +206,23 @@ class ContactForm extends Component {
 				            notchedOutline: classes.notchedOutline,
 				          },
 				        }}
+				        name="contactName"
 				        margin="normal"
-						error={this.state.errors.contactName.length > 0 }
+						error={this.state.contactName.length == 0 }
 						helperText={this.state.errors.contactName}
-						value={this.state.contactForm.contactName}
+						value={this.state.contactName}
+						onChange={(e) => this.handleUserInput(e)}
 						/>
+						
 						<TextField
 						select
 						fullWidth
 				        margin="normal"
-						error={this.state.errors.length === 0 ? false : true }
+				        name="contactMethod"
+						error={this.state.errors.contactMethod.length === 0 ? false : true }
 						label="Способ связи"
-						value={this.state.contactForm.contactMethod}
-						onChange={this.handleChange('contactForm.contactMethod')}
+						value={this.state.contactMethod}
+						onChange={(e) => this.handleUserInput(e)}
 						SelectProps={{
 							MenuProps: {
 								className: classes.menu,
@@ -199,16 +235,35 @@ class ContactForm extends Component {
 							</MenuItem>
 							))}
 						</TextField>
-						<TextField
-						required
-				        margin="normal"
-						id="standard-required"
-						label="Номер телефона"
-						fullWidth
-						error={this.state.errors.contactPhone.length > 0 }
-						helperText={this.state.errors.contactPhone}
-						value={this.state.contactForm.contactPhone}
-						/>
+
+						{this.state.contactMethod.value == "email" && 
+							<TextField
+							required
+					        margin="normal"
+							id="standard-required"
+							label="Email"
+							name="contactEmail"
+							fullWidth
+							error={this.state.errors.contactEmail.length > 0 }
+							helperText={this.state.errors.contactEmail}
+							value={this.state.contactEmail}
+							/>
+						}
+
+						{this.state.contactMethod.value == "phone" && 
+							<TextField
+							required
+					        margin="normal"
+							id="standard-required"
+							label="Номер телефона"
+							fullWidth
+							name="contactPhone"
+							error={this.state.errors.contactPhone.length > 0 }
+							helperText={this.state.errors.contactPhone}
+							value={this.state.contactPhone}
+							/>
+						}
+
 						<TextField
 						fullWidth
 						required
@@ -217,10 +272,13 @@ class ContactForm extends Component {
 						label="Сообщение"
 						multiline
 						rowsMax="4"
-						value={this.state.contactForm.message}
+						name="message"
+						value={this.state.message}
 						error={this.state.errors.message.length > 0 }
 						helperText={this.state.errors.message}
+						onChange={(e) => this.handleUserInput(e)}
 						/>
+						
 						<Button variant="outlined" 
 						disabled={!this.canSend}
 						className={classes.button}
