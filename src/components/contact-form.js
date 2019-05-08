@@ -11,7 +11,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import AWS from 'aws-sdk';
-import purple from '@material-ui/core/colors/purple';
+import * as Strings from '../strings'
 
 function rand() {
 	return Math.round(Math.random() * 20) - 10;
@@ -29,7 +29,7 @@ function getModalStyle() {
 }
 
 const styles = theme => ({
-	root: {
+  root: {
     display: 'flex',
     flexWrap: 'wrap',
   },
@@ -38,24 +38,25 @@ const styles = theme => ({
   },
   cssLabel: {
     '&$cssFocused': {
-      color: 'red',
+      color: '#787977',
     },
   },
-  cssFocused: {
-  	color: 'red',
-  },
+  cssFocused: {},
   cssUnderline: {
     '&:after': {
-      borderBottomColor: 'red',
+      borderBottomColor: '#787977',
     },
   },
   cssOutlinedInput: {
     '&$cssFocused $notchedOutline': {
-      borderColor: 'red',
+      borderColor: '#787977',
     },
   },
   notchedOutline: {},
 });
+
+const phoneRegex = /^[+0-9-()]{10,18}$/;
+const emailRegex = /(?=.{5,254}$)[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}/;
 
 const contactMethods = [
 {value : "viber", 
@@ -87,6 +88,7 @@ class ContactForm extends Component {
 		super(props);
 		this.checkSendAvailability = this.checkSendAvailability.bind(this);
 		this.sendEmail = this.sendEmail.bind(this);
+		this.canSend = this.canSend.bind(this);
 		AWS.config.credentials = new AWS.CognitoIdentityCredentials({
 			  IdentityPoolId: 'us-east-1:5a4ddc15-5509-4b71-a071-ad410fe6dc59'
 			});
@@ -96,6 +98,28 @@ class ContactForm extends Component {
 	handleChange = name => event => {
 		this.setState({ [name]: event.target.value });
 	};
+
+	validateInput (e) {
+		const name = e.target.name;
+		const value = e.target.value;
+		let message = "";
+
+		if (!value || value == "") {
+			message = Strings.EmptyFieldError;
+		}
+		else if (name == "contactPhone" && !phoneRegex.test(value)) {
+			message = Strings.InvalidPhoneError;
+		}
+		else if (name == "contactEmail" && !emailRegex.test(value)) {
+			message = Strings.InvalidEmailError;
+		}
+		else if (name == "message" && message.length > 2000 ) {
+			message = Strings.MessageTooDetailedError;
+		}    
+		let errors = this.state.errors;
+		errors[name] = message;
+		this.setState({ errors: errors });
+	} 
 
 	sendContactForm() {
 		console.log(`Form : ${JSON.stringify(this.state.contactForm)}`)
@@ -116,8 +140,11 @@ class ContactForm extends Component {
 	};
 
 	async sendEmail() {
-		let canBeSend = await this.checkSendAvailability();
-		if (!canBeSend) {
+		let canBeSent = this.canSend();
+
+		let statisticsAreOk = await this.checkSendAvailability();
+
+		if (!canBeSent || !statisticsAreOk) {
 			return;
 		}
 
@@ -159,7 +186,7 @@ class ContactForm extends Component {
 	}
 
 	canSend() {
-		return !this.state.error || this.state.error != "";
+		return (Object.values(this.state.errors).find(val => val != "")) === undefined;
 	}
 
 	handleUserInput (e) {
@@ -170,6 +197,7 @@ class ContactForm extends Component {
 
 	render() {
 		const { classes } = this.props;
+		const canSend = this.canSend();
 		
 		return (	
 			<Modal open={this.props.open}
@@ -189,11 +217,9 @@ class ContactForm extends Component {
 					Current form values : Name {this.state.contactName}, Method {this.state.contactMethod}
 					<br/>	
 						<TextField
-						required
-						id="standard-required"
 						label="Имя"
 						fullWidth
-						InputLabelProps={{
+				        InputLabelProps={{
 				          classes: {
 				            root: classes.cssLabel,
 				            focused: classes.cssFocused,
@@ -201,16 +227,15 @@ class ContactForm extends Component {
 				        }}
 				        InputProps={{
 				          classes: {
-				            root: classes.cssOutlinedInput,
-				            focused: classes.cssFocused,
-				            notchedOutline: classes.notchedOutline,
+				            underline: classes.cssUnderline,
 				          },
 				        }}
+				        error={this.state.errors.contactName != ""}
 				        name="contactName"
 				        margin="normal"
-						error={this.state.contactName.length == 0 }
-						helperText={this.state.errors.contactName}
+				        helperText={this.state.errors.contactName}
 						value={this.state.contactName}
+						onBlur={(e) => this.validateInput(e)}
 						onChange={(e) => this.handleUserInput(e)}
 						/>
 						
@@ -219,10 +244,23 @@ class ContactForm extends Component {
 						fullWidth
 				        margin="normal"
 				        name="contactMethod"
-						error={this.state.errors.contactMethod.length === 0 ? false : true }
 						label="Способ связи"
 						value={this.state.contactMethod}
+				        helperText={this.state.errors.contactMethod}
 						onChange={(e) => this.handleUserInput(e)}
+						onBlur={(e) => this.validateInput(e)}
+				        error={this.state.errors.contactMethod != ""}
+						InputLabelProps={{
+				          classes: {
+				            root: classes.cssLabel,
+				            focused: classes.cssFocused,
+				          },
+				        }}
+				        InputProps={{
+				          classes: {
+				            underline: classes.cssUnderline,
+				          },
+				        }}
 						SelectProps={{
 							MenuProps: {
 								className: classes.menu,
@@ -236,37 +274,57 @@ class ContactForm extends Component {
 							))}
 						</TextField>
 
-						{this.state.contactMethod.value == "email" && 
+						{this.state.contactMethod == "email" && 
 							<TextField
-							required
 					        margin="normal"
 							id="standard-required"
 							label="Email"
 							name="contactEmail"
 							fullWidth
-							error={this.state.errors.contactEmail.length > 0 }
-							helperText={this.state.errors.contactEmail}
+				        	error={this.state.errors.contactEmail != ""}
+							onBlur={(e) => this.validateInput(e)}
+				        	helperText={this.state.errors.contactEmail}
+							InputLabelProps={{
+					          classes: {
+					            root: classes.cssLabel,
+					            focused: classes.cssFocused,
+					          },
+					        }}
+					        InputProps={{
+					          classes: {
+					            underline: classes.cssUnderline,
+					          },
+					        }}
 							value={this.state.contactEmail}
 							/>
 						}
 
-						{this.state.contactMethod.value == "phone" && 
+						{this.state.contactMethod != "email" && 
 							<TextField
-							required
 					        margin="normal"
-							id="standard-required"
 							label="Номер телефона"
 							fullWidth
 							name="contactPhone"
-							error={this.state.errors.contactPhone.length > 0 }
-							helperText={this.state.errors.contactPhone}
+				        	helperText={this.state.errors.contactPhone}
+							onBlur={(e) => this.validateInput(e)}
+				        	error={this.state.errors.contactPhone != ""}
+							InputLabelProps={{
+					          classes: {
+					            root: classes.cssLabel,
+					            focused: classes.cssFocused,
+					          },
+					        }}
+					        InputProps={{
+					          classes: {
+					            underline: classes.cssUnderline,
+					          },
+					        }}
 							value={this.state.contactPhone}
 							/>
 						}
 
 						<TextField
 						fullWidth
-						required
 				        margin="normal"
 						id="standard-multiline-flexible"
 						label="Сообщение"
@@ -274,23 +332,36 @@ class ContactForm extends Component {
 						rowsMax="4"
 						name="message"
 						value={this.state.message}
-						error={this.state.errors.message.length > 0 }
-						helperText={this.state.errors.message}
 						onChange={(e) => this.handleUserInput(e)}
+						onBlur={(e) => this.validateInput(e)}
+				        helperText={this.state.errors.message}
+				        error={this.state.errors.message != ""}
+						InputLabelProps={{
+				          classes: {
+				            root: classes.cssLabel,
+				            focused: classes.cssFocused,
+				          },
+				        }}
+				        InputProps={{
+				          classes: {
+				            underline: classes.cssUnderline,
+				          },
+				        }}
 						/>
 						
 						<Button variant="outlined" 
-						disabled={!this.canSend}
-						className={classes.button}
-						onClick={this.sendEmail}>
-						Default
+							disabled={!canSend}
+							className={classes.button}
+							onClick={this.sendEmail}
+						>
+						Отправить
 						</Button>
 					</Grid>
 				</div>
 			</Modal>
 			);
 	}
-}
+ }
 
 ContactForm.propTypes = {
 	classes: PropTypes.object.isRequired,
