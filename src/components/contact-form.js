@@ -10,8 +10,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
-import AWS from 'aws-sdk';
 import * as Strings from '../strings'
+import EmailService from '../services/email-service';
 
 function rand() {
 	return Math.round(Math.random() * 20) - 10;
@@ -28,8 +28,6 @@ function getModalStyle() {
 	};
 }
 
-const MULTIPART_CHARS =
-             "-_1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 const styles = theme => ({
   root: {
@@ -64,21 +62,27 @@ const styles = theme => ({
 const phoneRegex = /^[+0-9-()]{10,18}$/;
 const emailRegex = /(?=.{5,254}$)[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}/;
 
-const contactMethods = [
-{value : "viber", 
-label : "Viber"},
-{value : "phone", 
-label : "Звонок"},
-{value : "email",
-label : "Email"}
-]
-class ContactForm extends Component {
+const ContactMethodType = {
+	PHONE : 'phone', 
+	EMAIL : 'email', 
+	VIBER : 'viber'
+}
 
+const contactMethods = [
+	{value : ContactMethodType.VIBER, 
+	label : "Viber"},
+	{value : ContactMethodType.PHONE, 
+	label : "Звонок"},
+	{value : ContactMethodType.EMAIL,
+	label : "Email"}
+];
+
+class ContactForm extends Component {
 
 	state = {
 		contactName : "", 
 		contactPhone : "", 
-		contactMethod : "",
+		contactMethod : "phone",
 		contactEmail : "", 
 		message : "", 
 		file : null,
@@ -94,17 +98,10 @@ class ContactForm extends Component {
 
 	constructor(props) {
 		super(props);
-		this.checkSendAvailability = this.checkSendAvailability.bind(this);
 		this.sendEmail = this.sendEmail.bind(this);
 		this.canSend = this.canSend.bind(this);
-		this.generateBoundary = this.generateBoundary.bind(this);
 		this.getBase64 = this.getBase64.bind(this);
-		this.getRawMessage = this.getRawMessage.bind(this);
-
-		AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-			  IdentityPoolId: 'us-east-1:5a4ddc15-5509-4b71-a071-ad410fe6dc59'
-			});
-		AWS.config.update({region: 'us-east-1'});
+		this.createMessage = this.createMessage.bind(this);
 	};	
 
 	handleChange = name => event => {
@@ -133,130 +130,10 @@ class ContactForm extends Component {
 		this.setState({ errors: errors });
 	} 
 
-	sendContactForm() {
-		console.log(`Form : ${JSON.stringify(this.state.contactForm)}`)
-	};
-
-	/*statistics for 2 weeks*/
-	async checkSendAvailability() {
-
-		return new AWS.SES({apiVersion: '2010-12-01'}).getSendStatistics()
-			.promise().then(function(data){
-
-				if (data.SendDataPoints) {
-				  	console.log(data);           // successful response
-				  	return data.SendDataPoints.length < 90;
-				  }
-				  return false;
-			});
-	};
-
-	async sendEmail() {
-		//let canBeSent = this.canSend();
-
-		//let statisticsAreOk = await this.checkSendAvailability();
-
-		//if (!canBeSent || !statisticsAreOk) {
-		//	return;
-		//}
-
-		/*let params = {
-		  Destination: { 
-		    ToAddresses: [
-		      'dasha.custom.personal@gmail.com',		    ]
-		  },
-		  Message: { 
-		    Body: { 
-		      Html: {
-		       Charset: "UTF-8",
-		       Data: "Some body <i>text</i> with HTML"
-		      },
-		      Text: {
-		       Charset: "UTF-8",
-		       Data: "More text"
-		      }
-		     },
-		     Subject: {
-		      Charset: 'UTF-8',
-		      Data: 'Open me NOW!'
-		     }
-		    },
-		  Source: 'daria.pindus@gmail.com', 
-		};
-
-		// Create the promise and SES service object
-		var sendPromise = new AWS.SES({apiVersion: '2010-12-01'}).sendEmail(params).promise();
-
-		// Handle promise's fulfilled/rejected states
-		sendPromise.then(
-		  function(data) {
-		    console.log(data.MessageId);
-		  }).catch(
-		    function(err) {
-		    console.error(err, err.stack);
-		  });*/
-		  debugger;
-		  let message = this.getRawMessage();
-		  let encodedMessage = window.btoa(unescape(encodeURIComponent(message)));
-
-		  var params = {
-			  RawMessage: { /* required */
-			    Data: new Buffer(message) || 'default' /* Strings will be Base-64 encoded on your behalf */ /* required */
-			  }
-			};
-			new AWS.SES({apiVersion: '2010-12-01'}).sendRawEmail(params, function(err, data) {
-			  if (err) console.log(err, err.stack); // an error occurred
-			  else     console.log(data);           // successful response
-			});
-	}
-
-	getRawMessage() {
-		let contentId = "ii_jvghiu120";
-		let boundary = this.generateBoundary();
-		let containsImage = this.state.file != null && this.state.file.data.length > 0;
-		let body = `<html>
-<head></head>
-<body>
-${containsImage ? '<img src="cid:' + contentId + '" alt="' + this.state.file.name + '"><br>' : ''}
-на русском текст 
-</body>
-</html>`;
-		let base64encoded = window.btoa(unescape(encodeURIComponent(body)));
-
-	let email = `From: Sender <daria.pindus@gmail.com>
-To: <dasha.custom.personal@gmail.com>
-Subject: =?utf-8?B?0K/QuiDRgtC4INC/0L7QttC40LLQsNGU0Yg/?=
-Content-Type: multipart/related;
-	boundary="${boundary}";
-	type="text/html"
-
---${boundary}
-Content-Type: text/html;
-Content-Transfer-Encoding: base64
-Content-Type-Encoding: base64
-
-${base64encoded}
-
-${containsImage ? '--' + boundary +'\n' +  
-'Content-Type: image/jpeg\n' + 
-'Content-Transfer-Encoding: base64\n' + 
-'Content-Disposition: attachment;filename="' + this.state.file.name + '";\n' + 
-'Content-ID: <' + contentId + '>\n\n' + 
-this.state.file.data.substring(this.state.file.data.indexOf(',') + 1) + '\n' : ''}
-
---${boundary}--`;
-		return email;
-	}
-
 	fileUpload = e => {
 		this.setState({ fileUploading : true});
 	    const files = Array.from(e.target.files);
 
-	    /*const formData = new FormData();
-
-	    files.forEach((file, i) => {
-	      formData.append(i, file)
-	    })*/
 	    this.getBase64(files[0]).then(data => { 
 			this.setState({ file : { data : data, name : files[0].name}});
 			this.setState({ fileUploading : false}, 
@@ -274,16 +151,6 @@ this.state.file.data.substring(this.state.file.data.indexOf(',') + 1) + '\n' : '
 	  });
 	}
 
-	generateBoundary() {
-             let boundary = "";
-             let count = Math.floor(Math.random() * (30 - 20 + 1)) + 20; 
-             for (let i = 0; i < count; i++) {
-             	let index = Math.floor(Math.random() * MULTIPART_CHARS.length); 
-             	boundary += (MULTIPART_CHARS[index]);
-             }
-             return boundary;
-        }
-
 	canSend() {
 		return !this.state.fileUploading && (Object.values(this.state.errors).find(val => val != "")) === undefined;
 	}
@@ -293,6 +160,36 @@ this.state.file.data.substring(this.state.file.data.indexOf(',') + 1) + '\n' : '
 	  const value = e.target.value;
 	  this.setState({[name]: value});
 	}
+
+	sendEmail() {
+		let canBeSent = this.canSend();
+
+		if (!canBeSent) {
+			return;
+		}
+
+		let message = this.createMessage();
+		EmailService.sendEmail(Strings.EmailSubject, message, this.state.file);
+	}
+
+	createMessage() {
+		let linkToReply = undefined;
+		if (this.state.contactMethod ==  ContactMethodType.EMAIL && this.state.contactEmail) {
+			linkToReply = EmailService.GetLinkToFastReply(Strings.ReplyEmailSubject, this.state.contactEmail, 'Ответить отправителю');
+		}
+
+		let message = `
+		<p><b>Имя : </b>${this.state.contactName}</p>
+		<p><b>Выбранный способ связи : </b>${this.state.contactMethod}</p>
+		<p><b>Контактный телефон : </b>${this.state.contactPhone}</p>
+		<p><b>Контактный email : </b>${this.state.contactEmail}</p>
+		<p><b>Сообщение : </b><br/> ${this.state.message}</p> 
+		${ linkToReply ? '<br/>' + linkToReply + '<br/>' : ''}`;
+
+		return message;
+	}
+
+
 
 	render() {
 		const { classes } = this.props;
