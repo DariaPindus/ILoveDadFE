@@ -2,8 +2,8 @@ import AWS from 'aws-sdk';
 
 const MULTIPART_CHARS =
 "-_1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const senderEmail = '';
-const receiverEmail = '';
+const senderEmail = 'daria.pindus@gmail.com';
+const receiverEmail = 'dasha.custom.personal@gmail.com';
 
 class EmailService {
 	
@@ -51,7 +51,7 @@ class EmailService {
 	async sendEmail(subject, body, attachment) {
 		let statisticsAreOk = await this.checkSendAvailability();
 
-		let message = this.getRawMessage();
+		let message = this.getRawMessage(subject, body, attachment);
 		let encodedMessage = window.btoa(unescape(encodeURIComponent(message)));
 
 		var params = {
@@ -59,10 +59,7 @@ class EmailService {
 				Data: new Buffer(message) || 'default' /* Strings will be Base-64 encoded on your behalf */ /* required */
 			}
 		};
-		new AWS.SES({apiVersion: '2010-12-01'}).sendRawEmail(params, function(err, data) {
-			  if (err) console.log(err, err.stack); // an error occurred
-			  else     console.log(data);           // successful response
-			});
+		return new AWS.SES({apiVersion: '2010-12-01'}).sendRawEmail(params).promise();
 	}
 
 	getRawMessage(subject, body, attachment) {
@@ -78,10 +75,11 @@ ${body}
 </body>
 </html>`;
 		let base64encoded = window.btoa(unescape(encodeURIComponent(htmlbody)));
+		let subjectEncoded = window.btoa(unescape(encodeURIComponent(subject)));
 
-		let email = `From: Sender <${senderEmail}>
+		let email = `From: 
 To: <${receiverEmail}>
-Subject: =?utf-8?B?0K/QuiDRgtC4INC/0L7QttC40LLQsNGU0Yg/?=
+Subject: =?utf-8?B?${subjectEncoded}?=
 Content-Type: multipart/related;
 	boundary="${boundary}";
 	type="text/html"

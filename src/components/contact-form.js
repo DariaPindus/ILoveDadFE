@@ -10,8 +10,17 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
+import CloseIcon from '@material-ui/icons/Close';
+import Snackbar from '@material-ui/core/Snackbar';
 import * as Strings from '../strings'
 import EmailService from '../services/email-service';
+import { ClipLoader } from 'react-spinners';
+import { css } from '@emotion/core';
+import amber from '@material-ui/core/colors/amber';
+import InfoIcon from '@material-ui/icons/Info';
+import IconButton from '@material-ui/core/IconButton';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import Icon from '@material-ui/core/Icon';
 
 function rand() {
 	return Math.round(Math.random() * 20) - 10;
@@ -28,6 +37,15 @@ function getModalStyle() {
 	};
 }
 
+const spinner = css`
+	margin: auto !important;
+    border-color: '#77746f' !important;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+`;
 
 const styles = theme => ({
   root: {
@@ -56,6 +74,23 @@ const styles = theme => ({
   notchedOutline: {},
   uploadInput: {
     display: 'none',
+  },
+  success: {
+    backgroundColor: 'green',
+  },
+  icon: {
+    fontSize: 20,
+  },
+  iconVariant: {
+    opacity: 0.9,
+    marginRight: theme.spacing.unit,
+  },
+  resultMessage: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  warning: {
+    backgroundColor: amber[700],
   },
 });
 
@@ -86,7 +121,10 @@ class ContactForm extends Component {
 		contactEmail : "", 
 		message : "", 
 		file : null,
-		fileUploading : false,
+		loading : false,
+		showResult : false,
+		resultMessage : "",
+		resultType : "",
 		errors : {
 			contactName : "",
 			contactPhone : "", 
@@ -131,14 +169,15 @@ class ContactForm extends Component {
 	} 
 
 	fileUpload = e => {
-		this.setState({ fileUploading : true});
+		this.setState({ loading : true});
 	    const files = Array.from(e.target.files);
 
 	    this.getBase64(files[0]).then(data => { 
 			this.setState({ file : { data : data, name : files[0].name}});
-			this.setState({ fileUploading : false}, 
-			error => console.log("error " + error));
-		});
+			this.setState({ loading : false})},
+
+			error => console.log("error " + error)
+		);
 
 	}
 
@@ -152,7 +191,7 @@ class ContactForm extends Component {
 	}
 
 	canSend() {
-		return !this.state.fileUploading && (Object.values(this.state.errors).find(val => val != "")) === undefined;
+		return !this.state.loading && (Object.values(this.state.errors).find(val => val != "")) === undefined;
 	}
 
 	handleUserInput (e) {
@@ -168,8 +207,23 @@ class ContactForm extends Component {
 			return;
 		}
 
+		this.setState({loading : true});
 		let message = this.createMessage();
-		EmailService.sendEmail(Strings.EmailSubject, message, this.state.file);
+		new EmailService().sendEmail(Strings.EmailSubject, message, this.state.file).then(
+		  data => {
+		  	this.setState({loading : false});
+			this.setState({showResult : true});
+			this.setState({resultMessage : Strings.EmailSentSuccessfully}); 
+		  	this.setState({resultType : 'success'});
+		  	this.props.handleClose();
+		  }).catch(
+		    err => {
+		    console.log('error');
+		    this.setState({loading : false});
+			this.setState({showResult : true});
+			this.setState({resultMessage : Strings.EmailSentError}); 
+			this.setState({resultType : 'warning'});
+		  });
 	}
 
 	createMessage() {
@@ -197,7 +251,7 @@ class ContactForm extends Component {
 		
 		return (	
 			<Modal open={this.props.open}
-			onClose={this.props.handleClose}>
+				onClose={this.props.handleClose}>
 				<div class="wrap-contact2">
 					<Grid
 					container
@@ -365,6 +419,41 @@ class ContactForm extends Component {
 						Отправить
 						</Button>
 					</Grid>
+					<ClipLoader
+				          css={spinner}
+				          sizeUnit={"px"}
+				          size={150}
+				          color={'#77746f'}
+				          loading={this.state.loading}
+				        />
+
+				   
+				    <Snackbar
+				          anchorOrigin={'top', 'left'}
+				          open={this.state.showResult}
+				    >
+					    <SnackbarContent
+					      className={classes[this.state.resultType]}
+					      aria-describedby="client-snackbar"
+					      message={
+					        <span id="client-snackbar" className={classes.message}>
+					          <Icon className={classNames(classes.icon, classes.iconVariant)} />
+					          {this.state.resultMessage}
+					        </span>
+					      }
+					      action={[
+					        <IconButton
+					          key="close"
+					          aria-label="Close"
+					          color="inherit"
+					          className={classes.close}
+					          onClick={() => this.setState({showResult : false})}
+					        >
+					          <CloseIcon className={classes.icon} />
+					        </IconButton>,
+					      ]}
+					    />
+				    </Snackbar>
 				</div>
 			</Modal>
 			);

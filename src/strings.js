@@ -7,3 +7,5 @@ export const MessageTooDetailedError = "Вы уверены, что вы не п
 
 export const EmailSubject = "Вам письмо."
 export const ReplyEmailSubject = "Ответ на вопрос"
+export const EmailSentSuccessfully = "Письмо было отправлено успешно."
+export const EmailSentError = "При отправке письма произошла ошибка. Пожалуйста, попробуйте позже или воспользуйтесь контактами на странице"
