@@ -213,46 +213,38 @@ class ContactForm extends Component {
 	getRawMessage() {
 		let contentId = "ii_jvghiu120";
 		let boundary = this.generateBoundary();
-		let containsImage = this.state.file != null && this.state.file.data.length > 0
-		let email = `From: "Sender Name" <daria.pindus@gmail.com>
-To: dasha.custom.personal@gmail.com
-Subject: TEst raaaaw
-Content-Type: multipart/mixed;
-    boundary="${boundary}"
-
---${boundary}
-Content-Type: multipart/alternative;
-    boundary="sub_${boundary}"
-
---sub_${boundary}
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-some text 
-
---sub_${boundary}
-Content-Type: text/html; charset=iso-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-<html>
+		let containsImage = this.state.file != null && this.state.file.data.length > 0;
+		let body = `<html>
 <head></head>
 <body>
-<h1>Hello!</h1>
-<p>Посмотрите на этого котенка.</p>
+${containsImage ? '<img src="cid:' + contentId + '" alt="' + this.state.file.name + '"><br>' : ''}
+на русском текст 
 </body>
-</html>
+</html>`;
+		let base64encoded = window.btoa(unescape(encodeURIComponent(body)));
 
---sub_${boundary}--
+	let email = `From: Sender <daria.pindus@gmail.com>
+To: <dasha.custom.personal@gmail.com>
+Subject: =?utf-8?B?0K/QuiDRgtC4INC/0L7QttC40LLQsNGU0Yg/?=
+Content-Type: multipart/related;
+	boundary="${boundary}";
+	type="text/html"
+
+--${boundary}
+Content-Type: text/html;
+Content-Transfer-Encoding: base64
+Content-Type-Encoding: base64
+
+${base64encoded}
 
 ${containsImage ? '--' + boundary +'\n' +  
 'Content-Type: image/jpeg\n' + 
-'Content-Disposition: attachment;filename="' + this.state.file.name + '";\n' + 
 'Content-Transfer-Encoding: base64\n' + 
+'Content-Disposition: attachment;filename="' + this.state.file.name + '";\n' + 
 'Content-ID: <' + contentId + '>\n\n' + 
-this.state.file.data.substring(this.state.file.data.indexOf(',') + 1) + '\n': ''}
+this.state.file.data.substring(this.state.file.data.indexOf(',') + 1) + '\n' : ''}
 
 --${boundary}--`;
-
 		return email;
 	}
 

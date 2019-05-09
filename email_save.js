@@ -42,7 +42,7 @@ Content-Transfer-Encoding: quoted-printable
 <head></head>
 <body>
 <img src="cid:${contentId}"><br>
-The deal you want
+на русском
 </body>
 </html>
 
