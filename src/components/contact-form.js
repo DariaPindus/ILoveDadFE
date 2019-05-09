@@ -28,6 +28,9 @@ function getModalStyle() {
 	};
 }
 
+const MULTIPART_CHARS =
+             "-_1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -53,6 +56,9 @@ const styles = theme => ({
     },
   },
   notchedOutline: {},
+  uploadInput: {
+    display: 'none',
+  },
 });
 
 const phoneRegex = /^[+0-9-()]{10,18}$/;
@@ -75,6 +81,8 @@ class ContactForm extends Component {
 		contactMethod : "",
 		contactEmail : "", 
 		message : "", 
+		file : null,
+		fileUploading : false,
 		errors : {
 			contactName : "",
 			contactPhone : "", 
@@ -89,6 +97,10 @@ class ContactForm extends Component {
 		this.checkSendAvailability = this.checkSendAvailability.bind(this);
 		this.sendEmail = this.sendEmail.bind(this);
 		this.canSend = this.canSend.bind(this);
+		this.generateBoundary = this.generateBoundary.bind(this);
+		this.getBase64 = this.getBase64.bind(this);
+		this.getRawMessage = this.getRawMessage.bind(this);
+
 		AWS.config.credentials = new AWS.CognitoIdentityCredentials({
 			  IdentityPoolId: 'us-east-1:5a4ddc15-5509-4b71-a071-ad410fe6dc59'
 			});
@@ -140,21 +152,21 @@ class ContactForm extends Component {
 	};
 
 	async sendEmail() {
-		let canBeSent = this.canSend();
+		//let canBeSent = this.canSend();
 
-		let statisticsAreOk = await this.checkSendAvailability();
+		//let statisticsAreOk = await this.checkSendAvailability();
 
-		if (!canBeSent || !statisticsAreOk) {
-			return;
-		}
+		//if (!canBeSent || !statisticsAreOk) {
+		//	return;
+		//}
 
-		let params = {
-		  Destination: { /* required */
+		/*let params = {
+		  Destination: { 
 		    ToAddresses: [
 		      'dasha.custom.personal@gmail.com',		    ]
 		  },
-		  Message: { /* required */
-		    Body: { /* required */
+		  Message: { 
+		    Body: { 
 		      Html: {
 		       Charset: "UTF-8",
 		       Data: "Some body <i>text</i> with HTML"
@@ -169,7 +181,7 @@ class ContactForm extends Component {
 		      Data: 'Open me NOW!'
 		     }
 		    },
-		  Source: 'daria.pindus@gmail.com', /* required */
+		  Source: 'daria.pindus@gmail.com', 
 		};
 
 		// Create the promise and SES service object
@@ -182,11 +194,106 @@ class ContactForm extends Component {
 		  }).catch(
 		    function(err) {
 		    console.error(err, err.stack);
-		  });
+		  });*/
+		  debugger;
+		  let message = this.getRawMessage();
+		  let encodedMessage = window.btoa(unescape(encodeURIComponent(message)));
+
+		  var params = {
+			  RawMessage: { /* required */
+			    Data: new Buffer(message) || 'default' /* Strings will be Base-64 encoded on your behalf */ /* required */
+			  }
+			};
+			new AWS.SES({apiVersion: '2010-12-01'}).sendRawEmail(params, function(err, data) {
+			  if (err) console.log(err, err.stack); // an error occurred
+			  else     console.log(data);           // successful response
+			});
 	}
 
+	getRawMessage() {
+		let contentId = "ii_jvghiu120";
+		let boundary = this.generateBoundary();
+		let containsImage = this.state.file != null && this.state.file.data.length > 0
+		let email = `From: "Sender Name" <daria.pindus@gmail.com>
+To: dasha.custom.personal@gmail.com
+Subject: TEst raaaaw
+Content-Type: multipart/mixed;
+    boundary="${boundary}"
+
+--${boundary}
+Content-Type: multipart/alternative;
+    boundary="sub_${boundary}"
+
+--sub_${boundary}
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+some text 
+
+--sub_${boundary}
+Content-Type: text/html; charset=iso-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head></head>
+<body>
+<h1>Hello!</h1>
+<p>Посмотрите на этого котенка.</p>
+</body>
+</html>
+
+--sub_${boundary}--
+
+${containsImage ? '--' + boundary +'\n' +  
+'Content-Type: image/jpeg\n' + 
+'Content-Disposition: attachment;filename="' + this.state.file.name + '";\n' + 
+'Content-Transfer-Encoding: base64\n' + 
+'Content-ID: <' + contentId + '>\n\n' + 
+this.state.file.data.substring(this.state.file.data.indexOf(',') + 1) + '\n': ''}
+
+--${boundary}--`;
+
+		return email;
+	}
+
+	fileUpload = e => {
+		this.setState({ fileUploading : true});
+	    const files = Array.from(e.target.files);
+
+	    /*const formData = new FormData();
+
+	    files.forEach((file, i) => {
+	      formData.append(i, file)
+	    })*/
+	    this.getBase64(files[0]).then(data => { 
+			this.setState({ file : { data : data, name : files[0].name}});
+			this.setState({ fileUploading : false}, 
+			error => console.log("error " + error));
+		});
+
+	}
+
+	getBase64(file) {
+	  return new Promise((resolve, reject) => {
+	    const reader = new FileReader();
+	    reader.readAsDataURL(file);
+	    reader.onload = () => resolve(reader.result);
+	    reader.onerror = error => reject(error);
+	  });
+	}
+
+	generateBoundary() {
+             let boundary = "";
+             let count = Math.floor(Math.random() * (30 - 20 + 1)) + 20; 
+             for (let i = 0; i < count; i++) {
+             	let index = Math.floor(Math.random() * MULTIPART_CHARS.length); 
+             	boundary += (MULTIPART_CHARS[index]);
+             }
+             return boundary;
+        }
+
 	canSend() {
-		return (Object.values(this.state.errors).find(val => val != "")) === undefined;
+		return !this.state.fileUploading && (Object.values(this.state.errors).find(val => val != "")) === undefined;
 	}
 
 	handleUserInput (e) {
@@ -213,9 +320,6 @@ class ContactForm extends Component {
 						Contact Us
 						</span>
 
-					<br/>
-					Current form values : Name {this.state.contactName}, Method {this.state.contactMethod}
-					<br/>	
 						<TextField
 						label="Имя"
 						fullWidth
@@ -283,6 +387,7 @@ class ContactForm extends Component {
 							fullWidth
 				        	error={this.state.errors.contactEmail != ""}
 							onBlur={(e) => this.validateInput(e)}
+							onChange={(e) => this.handleUserInput(e)}
 				        	helperText={this.state.errors.contactEmail}
 							InputLabelProps={{
 					          classes: {
@@ -305,6 +410,7 @@ class ContactForm extends Component {
 							label="Номер телефона"
 							fullWidth
 							name="contactPhone"
+							onChange={(e) => this.handleUserInput(e)}
 				        	helperText={this.state.errors.contactPhone}
 							onBlur={(e) => this.validateInput(e)}
 				        	error={this.state.errors.contactPhone != ""}
@@ -349,6 +455,19 @@ class ContactForm extends Component {
 				        }}
 						/>
 						
+						<input
+				        accept="image/*"
+				        className={classes.uploadInput}
+				        id="contained-button-file"
+				        onChange={this.fileUpload}
+				        type="file"
+				      />
+				      <label htmlFor="contained-button-file">
+				        <Button variant="contained" component="span" >
+				          Upload
+				        </Button>
+				      </label>
+
 						<Button variant="outlined" 
 							disabled={!canSend}
 							className={classes.button}
