@@ -1668,6 +1668,10 @@ a:active {
 /*--------------------------------------------------------------
 ## Posts
 --------------------------------------------------------------*/
+#about-content {
+  background-color: #eaeae9;
+
+}
 
 .byline,
 .updated:not(.published) {
@@ -3031,7 +3035,7 @@ body.page-template-template-full-width.page {
 .entry-content table th.about-values-title {
   background-color: transparent;
   text-align: center;
-  border: 1px solid #e1e1e1;
+  border: 5px solid white;
   color: #7d7d80;
   font-family: 'Work Sans', sans-serif;
   font-size: 16px;
@@ -3043,13 +3047,17 @@ body.page-template-template-full-width.page {
   text-transform: uppercase;
   float: left;
   width: 100%;
+
 }
+
 .values-table {
   margin: 0 0 150px;
   width: 100%;
   display: table;
   vertical-align: middle;
+  border : 7px solid white;
 }
+
 .entry-content .values-table td {
   width: 100%;
   display: block;
@@ -3058,6 +3066,7 @@ body.page-template-template-full-width.page {
   border-color: #e1e1e1;
   margin:0;
     border-top: none;
+  border : 5px solid white;  
 }
 
 .entry-content .values-table td {
@@ -3616,6 +3625,7 @@ object {
 }
 
 .site-branding a {
+    text-decoration: none;    
   display: inline-block;
 }
 
@@ -4350,6 +4360,7 @@ input[type="submit"],
   .site-branding {
     float: none;
     padding: 20px 20px 20px 0;
+      text-transform: uppercase;
   }
 
   .header-container {
@@ -5648,7 +5659,7 @@ input[type="submit"],
   .site-branding {
     padding: 15px 40px 20px;
     text-align: left;
-  }
+  } 
 
   .main-navigation {
     text-align: right;

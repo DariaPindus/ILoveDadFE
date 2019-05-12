@@ -9,6 +9,7 @@ import Home from './components/home';
 import PageBanner from './components/page-banner';
 import InlineCategories from './components/inline-categories';
 import PageContent from './components/page-content';
+import AboutPage from './components/about';
 import { BrowserRouter as Router , Route, Switch, Redirect } from "react-router-dom";
 
 /*className={classes.root}*/
@@ -24,6 +25,7 @@ class App extends Component {
               <Redirect to="/categories/all"/>
           )}/>
           <Route path="/categories" component={Home} />
+      <Route path={`/about`} component={AboutPage} />
       </Router>
     );
   }

@@ -62,7 +62,7 @@ export function fetchItems(categoryKey) {
 /*
 possible categories : all , ....
 */
-export function fetchCategories() {
+export async function fetchCategories() {
   if (cache.categories.length > 0)
     return cache.categories;
 

@@ -5,6 +5,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import toRenderProps from 'recompose/toRenderProps';
 import withState from 'recompose/withState';
 import Category from './category';
+import { Link } from "react-router-dom";
+import { HashLink } from 'react-router-hash-link';
 
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
@@ -20,7 +22,7 @@ const NavigationItem = (props) => {
 	if (item.childElements && item.childElements.length > 0) 
 		liClasses += "menu-item-has-children has_children"
 	return (
-		<li className={liClasses} aria-haspopup="true"><a href="#">{item.name}</a> 
+		<li className={liClasses} aria-haspopup="true"><HashLink to={item.route}>{item.name}</HashLink> 
 		{item.childElements && item.childElements.length > 0 && <React.Fragment>
 		<span className="dropdown-toggle"></span>
 		<ul className="sub-menu nav-menu" >
@@ -49,38 +51,20 @@ class Header extends Component {
 		this.state = {
 			navigationItems : [
 				{
-					id : "categs",
-					name : "Категории", 
-					childElements : [], 
-					route : ""		
-				}, 
-				{
 					id : "about",
 					name : "О нас", 
-					route : ""		
+					route : "/about"		
 				}, 
 				{
 					id : "contacts",
 					name : "Контакты", 
-					route : ""		
+					route : "/#contact-info"		
 				}
 			] 
 		}
 	}
 
-	SITE_BRANDING_NAME = "Мой сайт"
-
-	/*todo: poprobovat' async*/
-	componentWillMount() {
-		fetchCategories().then(response => {
-			let navigationItems = this.state.navigationItems;
-			let categsInd = navigationItems.map(e => e.id).indexOf('categs');
-			let categs = navigationItems[categsInd];
-			categs.childElements = response;
-			navigationItems[categsInd] = categs;
-			this.setState(navigationItems);
-		});
-	}
+	SITE_BRANDING_NAME = "Домой"
 
 	render () {
 		return (
@@ -89,7 +73,9 @@ class Header extends Component {
 					<div className="container header-container">
 						<div className="navbar-header">
 							<div className="site-branding">
-								{this.SITE_BRANDING_NAME}
+								<Link to="/"> 
+									{this.SITE_BRANDING_NAME}
+								</Link>
 							</div>
 
 							<span className="menu-toggle-content">

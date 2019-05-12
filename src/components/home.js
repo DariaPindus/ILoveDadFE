@@ -5,6 +5,7 @@ import PageBanner from './page-banner';
 import InlineCategories from './inline-categories';
 import ItemsContainer from './items-container';
 import ContactPageBanner from './contact-banner';
+import AboutPage from './about';
 
 import { Router, Route } from "react-router-dom";
 import { fetchCategories } from '../services/api';
@@ -35,7 +36,7 @@ function MainPageBanner(){
 function ContactInfo() {
 	return(
 		<footer id="colophon" class="site-footer">
-			<div class="container">
+			<div class="container" id="contact-info">
 				<div class="textwidget">
 					<div>
 						<h2>Пиндус и Ко</h2>
@@ -61,11 +62,10 @@ class Home extends Component {
 		};
 	}
 
-	componentWillMount() {
-		fetchCategories().then(response => {
-			let categories = response;
-			this.setState({categories : categories});
-		});
+	async componentWillMount() {
+		let categs = await fetchCategories();
+
+		this.setState({categories : categs});
 	}
 
 	render() {
