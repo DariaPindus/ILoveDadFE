@@ -52,7 +52,7 @@ const styles = theme => ({
     display: 'flex',
     flexWrap: 'wrap',
   },
-  margin: {
+  button: {
     margin: theme.spacing.unit,
   },
   cssLabel: {
@@ -406,7 +406,8 @@ class ContactForm extends Component {
 				        type="file"
 				      />
 				      <label htmlFor="contained-button-file">
-				        <Button variant="contained" component="span" >
+				        <Button variant="outlined"
+							className={classes.button} >
 				          Upload
 				        </Button>
 				      </label>
