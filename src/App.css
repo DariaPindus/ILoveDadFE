@@ -2726,13 +2726,13 @@ body.page-template-template-full-width.page {
     display: table;
     width: 100%;
     table-layout: fixed;
-    border-spacing: 10px;
 }
 
 .attachment-column
 {
     display: table-cell;
-    background-color: red;
+    border: 1px solid #e1e1e1;
+    text-align: center;
 }
 
 .attachment-column-action, .attachment-column-icon  {

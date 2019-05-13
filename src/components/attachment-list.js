@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 
-const AttachmentRow = ({att}) => {
+const AttachmentRow = ({att, key, onDelete}) => {
 	return (
 		<div class="attachment-row">
 		    <div class="attachment-column attachment-column-icon"><i class="far fa-image"></i></div>
 		    <div class="attachment-column attachment-column-name">{att.name}</div>
-		    <div class="attachment-column attachment-column-action"><i class="far fa-times" onClick={() => {att.onDelete(att.key)}}></i></div>
+		    <div class="attachment-column attachment-column-action"><i class="far fa-times" onClick={() => {onDelete(key)}}></i></div>
 		</div>
 		);
 

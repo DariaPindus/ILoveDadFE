@@ -21,6 +21,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import Icon from '@material-ui/core/Icon';
+import AttachmentList from './attachment-list';
 
 function rand() {
 	return Math.round(Math.random() * 20) - 10;
@@ -176,7 +177,10 @@ class ContactForm extends Component {
 			this.setState({ file : { data : data, name : files[0].name}});
 			this.setState({ loading : false})},
 
-			error => console.log("error " + error)
+			error => {
+				console.log("error " + error);
+				this.setState({ loading : false})
+			}
 		);
 
 	}
@@ -244,6 +248,9 @@ class ContactForm extends Component {
 	}
 
 
+	onPhotoDelete() {
+		this.setState({file : null})
+	}
 
 	render() {
 		const { classes } = this.props;
@@ -398,6 +405,13 @@ class ContactForm extends Component {
 				        }}
 						/>
 						
+
+						{(this.state.file && this.state.file.name) && 
+							<AttachmentList files={this.state.file}
+								onDelete={() => this.onPhotoDelete()}
+							/>
+						}
+
 						<input
 				        accept="image/*"
 				        className={classes.uploadInput}
@@ -406,9 +420,9 @@ class ContactForm extends Component {
 				        type="file"
 				      />
 				      <label htmlFor="contained-button-file">
-				        <Button variant="outlined"
+				        <Button variant="outlined"  component="span"
 							className={classes.button} >
-				          Upload
+				          Добавить фото
 				        </Button>
 				      </label>
 
