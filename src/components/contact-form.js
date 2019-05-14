@@ -219,14 +219,14 @@ class ContactForm extends Component {
 			this.setState({showResult : true});
 			this.setState({resultMessage : Strings.EmailSentSuccessfully}); 
 		  	this.setState({resultType : 'success'});
-		  	this.props.handleClose();
+		  	this.handleClose();
 		  }).catch(
 		    err => {
 		    console.log('error');
-		    this.setState({loading : false});
-			this.setState({showResult : true});
-			this.setState({resultMessage : Strings.EmailSentError}); 
+		    this.setState({loading : false}); 
 			this.setState({resultType : 'warning'});
+			this.setState({resultMessage : Strings.EmailSentError});
+			this.setState({showResult : true});
 		  });
 	}
 
@@ -247,6 +247,28 @@ class ContactForm extends Component {
 		return message;
 	}
 
+	handleClose() {
+		this.setState({
+			contactName : "", 
+			contactPhone : "", 
+			contactMethod : "phone",
+			contactEmail : "", 
+			message : "", 
+			file : null,
+			loading : false,
+			showResult : false,
+			resultMessage : "",
+			resultType : "",
+			errors : {
+				contactName : "",
+				contactPhone : "", 
+				contactMethod : "", 
+				message : "",
+				contactEmail : "" 
+			}
+		});
+		this.props.handleClose();
+	}
 
 	onPhotoDelete() {
 		this.setState({file : null})
@@ -258,7 +280,7 @@ class ContactForm extends Component {
 		
 		return (	
 			<Modal open={this.props.open}
-				onClose={this.props.handleClose}>
+				onClose={() => this.handleClose()}>
 				<div class="wrap-contact2">
 					<Grid
 					container
@@ -267,7 +289,7 @@ class ContactForm extends Component {
 					alignItems="center"
 					>
 						<span class="contact2-form-title">
-						Contact Us
+						Свяжитесь с нами
 						</span>
 
 						<TextField
@@ -442,33 +464,22 @@ class ContactForm extends Component {
 				          loading={this.state.loading}
 				        />
 
-				   
-				    <Snackbar
-				          anchorOrigin={'top', 'left'}
-				          open={this.state.showResult}
-				    >
-					    <SnackbarContent
-					      className={classes[this.state.resultType]}
-					      aria-describedby="client-snackbar"
-					      message={
-					        <span id="client-snackbar" className={classes.message}>
-					          <Icon className={classNames(classes.icon, classes.iconVariant)} />
-					          {this.state.resultMessage}
-					        </span>
-					      }
-					      action={[
-					        <IconButton
-					          key="close"
-					          aria-label="Close"
-					          color="inherit"
-					          className={classes.close}
-					          onClick={() => this.setState({showResult : false})}
-					        >
-					          <CloseIcon className={classes.icon} />
-					        </IconButton>,
-					      ]}
-					    />
-				    </Snackbar>
+				   <Snackbar
+			          anchorOrigin={{
+			            vertical: 'bottom',
+			            horizontal: 'center',
+			          }}
+			          open={this.state.showResult}
+			          autoHideDuration={5000}
+			          onClose={() => this.setState({showResult : false})}
+			          onExited={() => this.setState({showResult : false})}
+			          ContentProps={{
+			            'aria-describedby': 'message-id',
+			          	className : classes[this.state.resultType]
+			          }}
+			          message={<span id="message-id" className={classes.message}>{this.state.resultMessage}</span>}
+			        />
+
 				</div>
 			</Modal>
 			);
