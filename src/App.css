@@ -2726,6 +2726,7 @@ body.page-template-template-full-width.page {
     display: table;
     width: 100%;
     table-layout: fixed;
+    margin: auto;
 }
 
 .attachment-column

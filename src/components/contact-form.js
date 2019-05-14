@@ -38,6 +38,10 @@ function getModalStyle() {
 	};
 }
 
+const isEmpty = (str) => {
+	return !str || str.trim().length == 0; 
+};
+
 const spinner = css`
 	margin: auto !important;
     border-color: '#77746f' !important;
@@ -195,7 +199,12 @@ class ContactForm extends Component {
 	}
 
 	canSend() {
-		return !this.state.loading && (Object.values(this.state.errors).find(val => val != "")) === undefined;
+		return !this.state.loading && 
+			(!isEmpty(this.state.contactName) && isEmpty(this.state.errors.contactName)) &&  
+			(!isEmpty(this.state.contactMethod) && isEmpty(this.state.errors.contactMethod)) && 
+			((this.state.contactMethod === ContactMethodType.EMAIL && !isEmpty(this.state.contactEmail) && isEmpty(this.state.errors.contactEmail)) ||
+				(this.state.contactMethod !== ContactMethodType.EMAIL && !isEmpty(this.state.contactPhone) && isEmpty(this.state.errors.contactPhone))) &&
+			(!isEmpty(this.state.message) && isEmpty(this.state.errors.message));
 	}
 
 	handleUserInput (e) {

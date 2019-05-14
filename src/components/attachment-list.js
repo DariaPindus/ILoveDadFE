@@ -6,7 +6,7 @@ const AttachmentRow = ({att, key, onDelete}) => {
 		<div class="attachment-row">
 		    <div class="attachment-column attachment-column-icon"><i class="far fa-image"></i></div>
 		    <div class="attachment-column attachment-column-name">{att.name}</div>
-		    <div class="attachment-column attachment-column-action"><i class="far fa-times" onClick={() => {onDelete(key)}}></i></div>
+		    <div class="attachment-column attachment-column-action"  onClick={() => {onDelete(key)}}><i class="far fa-times-circle"></i></div>
 		</div>
 		);
 
