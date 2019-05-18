@@ -78,9 +78,6 @@ class Header extends Component {
 								</Link>
 							</div>
 
-							<span className="menu-toggle-content">
-								<button className="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><i className="fa fa-bars" aria-hidden="true"></i></button>
-							</span>
 						</div>
 
 						<nav id="site-navigation" className="main-navigation site-navigation">

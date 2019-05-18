@@ -77,7 +77,7 @@ ${body}
 		let base64encoded = window.btoa(unescape(encodeURIComponent(htmlbody)));
 		let subjectEncoded = window.btoa(unescape(encodeURIComponent(subject)));
 
-		let email = `From: 
+		let email = `From: <${senderEmail}> 
 To: <${receiverEmail}>
 Subject: =?utf-8?B?${subjectEncoded}?=
 Content-Type: multipart/related;

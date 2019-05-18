@@ -97,6 +97,9 @@ const styles = theme => ({
   warning: {
     backgroundColor: amber[700],
   },
+  modal : {
+  	overflowY: 'scroll'
+  }
 });
 
 const phoneRegex = /^[+0-9-()]{10,18}$/;
@@ -199,7 +202,8 @@ class ContactForm extends Component {
 	}
 
 	canSend() {
-		return !this.state.loading && 
+		return !this.state.loading &&
+			!this.state.showResult &&  
 			(!isEmpty(this.state.contactName) && isEmpty(this.state.errors.contactName)) &&  
 			(!isEmpty(this.state.contactMethod) && isEmpty(this.state.errors.contactMethod)) && 
 			((this.state.contactMethod === ContactMethodType.EMAIL && !isEmpty(this.state.contactEmail) && isEmpty(this.state.errors.contactEmail)) ||
@@ -225,10 +229,10 @@ class ContactForm extends Component {
 		new EmailService().sendEmail(Strings.EmailSubject, message, this.state.file).then(
 		  data => {
 		  	this.setState({loading : false});
-			this.setState({showResult : true});
 			this.setState({resultMessage : Strings.EmailSentSuccessfully}); 
 		  	this.setState({resultType : 'success'});
-		  	this.handleClose();
+			this.setState({showResult : true});
+		  	setTimeout(() => this.handleClose(), 3000);
 		  }).catch(
 		    err => {
 		    console.log('error');
@@ -289,7 +293,8 @@ class ContactForm extends Component {
 		
 		return (	
 			<Modal open={this.props.open}
-				onClose={() => this.handleClose()}>
+				onClose={() => this.handleClose()}
+				className={classes.modal}>
 				<div class="wrap-contact2">
 					<Grid
 					container

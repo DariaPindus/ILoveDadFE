@@ -27,7 +27,7 @@ class AboutPage extends Component {
 												</tr>
 												<tr>
 													<td>
-														<i class="far fa-clipboard-list"></i>
+														<i class="fas fa-clipboard-list"></i>
 														<br/>
 														<strong>Наши услуги</strong>
 														<p></p>

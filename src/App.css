@@ -1077,17 +1077,22 @@ a:active {
 
 .main-navigation ul,
 .categories-navigation ul {
-  display: none;
-  margin: 0;
-  padding-left: 0;
-  list-style: none;
+    display: inline-grid;
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+    width: 100%;
+    text-align: center;
 }
 
 .main-navigation li {
   display: block;
   float: left;
   position: static;
-  text-transform: uppercase;
+  text-transform: uppercase;    
+  border-bottom: 2px solid white;
+  padding: 5px;
+  background: #46474a;
 }
 
 .main-navigation li:first-child {
@@ -1098,6 +1103,7 @@ a:active {
   padding-bottom: 14px;
   text-decoration: none;
   letter-spacing: 0.1em;
+  color : #c4bdb2;
 }
 
 .main-navigation .menu-item-has-children > ul,
@@ -3241,6 +3247,9 @@ object {
   vertical-align: middle;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  border-bottom: 1px solid #e1e1e1;
+  padding: 5px;
+  background: white;
 }
 
 .categories-navigation li a {
@@ -4875,6 +4884,7 @@ input[type="submit"],
     float: none;
     margin: 10px 0 10px 42px;
     text-transform: uppercase;
+    background: white;
   }
 
   .main-navigation li:first-child {
@@ -4888,7 +4898,8 @@ input[type="submit"],
   .main-navigation a {
     padding-bottom: 14px;
     text-decoration: none;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.1em;    
+    color: #a8a8a8;
   }
 
   .main-navigation li a {
