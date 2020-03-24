@@ -233,7 +233,7 @@ class ContactForm extends Component {
 		this.setState({loading : true});
 		let message = this.createMessage();
 		new EmailService().sendEmail(Strings.EmailSubject, message, this.state.file).then(
-		  () => {
+		  data => {
 		  	this.setState({loading : false});
 			this.setState({resultMessage : Strings.EmailSentSuccessfully}); 
 		  	this.setState({resultType : 'success'});

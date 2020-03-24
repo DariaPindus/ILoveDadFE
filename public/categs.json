@@ -1,0 +1,26 @@
+[  
+   {  
+      "id":0,
+      "name":"Все", 
+      "route":"all", 
+      "key" : "all" 
+   },
+   {  
+      "id":1,
+      "name":"Кухни", 
+      "route":"kitchen", 
+      "key" : "kitchen"
+   },
+   {  
+      "id":2,
+      "name":"Шкафы", 
+      "route":"shkaf", 
+      "key" : "shkaf"
+   },
+   {  
+      "id":3,
+      "name":"Прихожие", 
+      "route":"hall", 
+      "key" : "hall"
+   }
+]

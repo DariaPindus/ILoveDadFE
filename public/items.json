@@ -1,0 +1,62 @@
+  [
+    {
+      "id": 158,
+      "price": 1126.36,
+      "picture": "/img/apartment-clean_sm.jpg",
+      "title": "elit",
+      "category" : "kitchen"
+    },
+    {
+      "id": 38,
+      "price": 2252.7,
+      "picture": "/img/pexels-photo-154161_sm.jpg",
+      "title": "nulla",
+      "category" : "kitchen"
+    },
+    {
+      "id": 79,
+      "price": 3980.76,
+      "picture": "/img/pexels-photo-245208_sm.jpg",
+      "title": "ut",
+      "category" : "shkaf"
+    },
+    {
+      "id": 45,
+      "price": 1600.38,
+      "picture": "/img/pexels-photo-276583_sm.jpg",
+      "title": "adipisicing",
+      "category" : "hall"
+    },
+    {
+      "id": 10,
+      "price": 1257.16,
+      "picture": "/img/pexels-photo-509922_sm.jpg",
+      "title": "proident",
+      "colors": [
+        "black",
+        "white"
+      ], 
+      "category" : "hall"
+    },
+    {
+      "id": 10,
+      "price": 1257.16,
+      "picture": "/img/pexels-photo-534172_sm.jpg",
+      "title": "proident",
+      "category" : "kitchen"
+    },
+    {
+      "id": 10,
+      "price": 1257.16,
+      "picture": "/img/pexels-photo-700549_sm.png",
+      "title": "proident",
+      "category" : "shkaf"
+    },
+    {
+      "id": 10,
+      "price": 1257.16,
+      "picture": "/img/pexels-photo-1080721_sm.jpg",
+      "title": "proident",
+      "category" : "kitchen"
+    }
+  ]
