@@ -67,7 +67,7 @@ class EmailService {
 	getRawMessage(subject, body, attachment) {
 		let contentId = this.generateRandomString(12);
 		let boundary = this.generateRandomString(20, 30);
-		let containsImage = attachment != null && attachment != undefined && attachment.data.length > 0;
+		let containsImage = attachment !== null && attachment !== undefined && attachment.data.length > 0;
 
 		let htmlbody = `<html>
 <head></head>
